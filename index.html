@@ -1,326 +1,223 @@
 
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZEUSGPT — AI Assistant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZEUSGPT - AI Assistant</title>
 <style>
-:root {
-  --bg:#080812;
-  --panel:#101020;
-  --panel2:#17172b;
-  --text:#f4f3ff;
-  --muted:#9999b5;
-  --purple:#8b5cf6;
-  --blue:#38bdf8;
-  --border:rgba(255,255,255,.09);
-}
 *{box-sizing:border-box}
-body{
-  margin:0;background:
-  radial-gradient(ellipse at 70% 0%,#25205a 0%,transparent 42%),
-  var(--bg);color:var(--text);
-  font-family:Arial,sans-serif;height:100dvh;overflow:hidden;
-}
-.app{display:flex;height:100dvh}
-.sidebar{
-  width:270px;background:rgba(12,12,27,.94);
-  border-right:1px solid var(--border);
-  padding:20px;display:flex;flex-direction:column;
-}
-.brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;margin-bottom:28px}
-.logo{
-  width:39px;height:39px;border-radius:13px;
-  display:grid;place-items:center;font-size:23px;
-  background:linear-gradient(135deg,var(--purple),var(--blue));
-  box-shadow:0 0 25px #8055ff66;
-}
-.new-chat{
-  padding:13px;border:1px solid #8055ff66;
-  background:#21183c;color:white;border-radius:12px;
-  cursor:pointer;font-size:14px;margin-bottom:20px;
-}
-.new-chat:hover{background:#33225b}
-.history-title{font-size:12px;color:var(--muted);margin:10px 0}
+:root{--bg:#080812;--panel:#111124;--purple:#9060ff;--blue:#38caff;--text:#f4f2ff}
+body{margin:0;background:radial-gradient(ellipse at top,#29205a,#080812 55%);color:var(--text);font-family:Arial,sans-serif;height:100dvh;overflow:hidden}
+.app{height:100dvh;display:flex}
+.sidebar{width:265px;background:#0c0c19;border-right:1px solid #ffffff16;padding:20px;display:flex;flex-direction:column}
+.brand{font-size:23px;font-weight:bold;margin-bottom:25px;display:flex;align-items:center;gap:10px}
+.logo{background:linear-gradient(135deg,var(--purple),var(--blue));padding:10px;border-radius:12px}
+.new{background:#292044;color:white;border:1px solid #7955dd;padding:13px;border-radius:12px;cursor:pointer}
+.small{font-size:12px;color:#999;margin:22px 0 10px}
 .history{overflow:auto;flex:1}
-.history-item{
-  padding:11px;border-radius:9px;color:#c7c5dd;
-  cursor:pointer;white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;font-size:13px;margin-bottom:5px;
-}
-.history-item:hover,.history-item.active{background:#22213a}
-.side-bottom{font-size:12px;color:var(--muted);padding-top:15px;border-top:1px solid var(--border)}
+.item{padding:12px;border-radius:9px;cursor:pointer;color:#ccc;font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.item:hover,.item.active{background:#24213b}
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
-.topbar{
-  height:65px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 25px;background:#0c0c19aa;
-}
-.top-title{font-weight:700}
-.status{font-size:12px;color:#7ee7b0}
-.chat{
-  flex:1;overflow-y:auto;padding:30px 18px 20px;
-  scroll-behavior:smooth;
-}
-.welcome{max-width:750px;margin:10vh auto 0;text-align:center}
-.welcome-icon{
-  font-size:48px;margin-bottom:18px;
-  filter:drop-shadow(0 0 20px #9b72ff);
-}
-h1{
-  font-size:clamp(30px,5vw,48px);margin:0 0 12px;
-  background:linear-gradient(90deg,#c4a5ff,#55d6ff);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.subtitle{color:var(--muted);line-height:1.6}
-.suggestions{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;margin-top:35px;text-align:left;
-}
-.suggestion{
-  border:1px solid var(--border);background:#17172b99;
-  border-radius:13px;padding:16px;cursor:pointer;color:#ddd9f6;
-}
-.suggestion:hover{border-color:#9368ff;background:#24203e}
+header{height:62px;border-bottom:1px solid #ffffff16;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#0c0c19aa}
+header strong{font-size:17px}
+.online{font-size:12px;color:#73e6a9}
+.menu{display:none;background:none;color:white;border:0;font-size:23px}
+.chat{flex:1;overflow:auto;padding:25px 16px}
+.welcome{text-align:center;max-width:700px;margin:9vh auto}
+.thunder{font-size:55px;filter:drop-shadow(0 0 20px #a078ff)}
+h1{font-size:clamp(35px,6vw,55px);background:linear-gradient(90deg,#c8aaff,#4bd8ff);color:transparent;background-clip:text;margin:10px}
+.desc{color:#aaa;line-height:1.6}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:35px;text-align:left}
+.card{background:#19182d;border:1px solid #ffffff16;padding:17px;border-radius:13px;cursor:pointer;color:#eee}
+.card:hover{border-color:var(--purple)}
 .messages{max-width:850px;margin:auto}
-.message{display:flex;gap:12px;margin:22px 0;align-items:flex-start}
-.avatar{
-  width:34px;height:34px;flex-shrink:0;border-radius:11px;
-  display:grid;place-items:center;background:#292044;
-}
-.message.user .avatar{background:#18334b}
-.bubble{
-  max-width:100%;line-height:1.7;white-space:pre-wrap;
-  overflow-wrap:anywhere;padding:12px 15px;
-  border-radius:14px;background:#17172a;
-}
-.message.user .bubble{background:#202443}
-.message-content{min-width:0;flex:1}
-.message-name{font-size:12px;color:var(--muted);margin:2px 0 6px}
-.composer-wrap{padding:15px 18px 22px}
-.composer{
-  max-width:850px;margin:auto;display:flex;gap:10px;
-  padding:10px;background:#17172a;border:1px solid #ffffff18;
-  border-radius:17px;box-shadow:0 0 35px #0006;
-}
-textarea{
-  flex:1;resize:none;max-height:150px;min-height:42px;
-  background:transparent;border:0;outline:0;color:white;
-  font:15px Arial;padding:12px;
-}
-textarea::placeholder{color:#85859e}
-.send{
-  width:45px;height:45px;border:0;border-radius:12px;
-  background:linear-gradient(135deg,var(--purple),var(--blue));
-  color:white;font-size:20px;cursor:pointer;
-}
-.send:disabled{opacity:.5;cursor:not-allowed}
-.hint{text-align:center;color:#77778f;font-size:11px;margin-top:10px}
-.typing{color:#aaa;font-size:13px;padding:10px}
-.menu-btn{display:none;background:none;border:0;color:white;font-size:22px}
+.message{display:flex;gap:12px;margin:22px 0}
+.avatar{width:35px;height:35px;border-radius:11px;display:grid;place-items:center;background:#292044;flex-shrink:0}
+.message.user .avatar{background:#17364c}
+.content{flex:1;min-width:0}
+.name{font-size:12px;color:#999;margin-bottom:7px}
+.bubble{background:#19182d;padding:13px 15px;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
+.message.user .bubble{background:#202744}
+.bottom{padding:12px 16px 20px}
+.composer{max-width:850px;margin:auto;display:flex;gap:10px;background:#19182d;border:1px solid #ffffff20;border-radius:16px;padding:9px}
+textarea{flex:1;resize:none;background:transparent;border:0;outline:0;color:white;padding:12px;font:15px Arial;max-height:130px}
+textarea::placeholder{color:#999}
+.send{width:46px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--blue));color:white;font-size:21px;cursor:pointer}
+.send:disabled{opacity:.5}
+.hint{text-align:center;font-size:11px;color:#777;margin-top:10px}
 @media(max-width:700px){
-  .sidebar{position:fixed;z-index:5;left:-280px;top:0;bottom:0;transition:.25s}
-  .sidebar.open{left:0}
-  .menu-btn{display:block}
-  .topbar{padding:0 14px}
-  .chat{padding:20px 13px}
-  .welcome{margin-top:7vh}
-  .suggestions{grid-template-columns:1fr}
-  .composer-wrap{padding:10px}
+.sidebar{position:fixed;z-index:5;left:-280px;top:0;bottom:0;transition:.2s}
+.sidebar.open{left:0}
+.menu{display:block}
+.cards{grid-template-columns:1fr}
+header{padding:0 12px}
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand"><div class="logo">⚡</div> ZEUSGPT</div>
-    <button class="new-chat" onclick="newChat()">＋ Cuộc trò chuyện mới</button>
-    <div class="history-title">LỊCH SỬ TRÒ CHUYỆN</div>
-    <div class="history" id="history"></div>
-    <div class="side-bottom">⚡ ZEUSGPT AI · Phiên bản 1.0</div>
-  </aside>
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><span class="logo">⚡</span> ZEUSGPT</div>
+  <button class="new" onclick="newChat()">＋ Cuộc trò chuyện mới</button>
+  <div class="small">LỊCH SỬ</div>
+  <div class="history" id="history"></div>
+  <div class="small">ZEUSGPT AI · 2026</div>
+</aside>
 
-  <main class="main">
-    <header class="topbar">
-      <div style="display:flex;align-items:center;gap:12px">
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-        <div class="top-title">ZEUSGPT <span style="color:#9c7bff">AI</span></div>
-      </div>
-      <div class="status">● Hệ thống sẵn sàng</div>
-    </header>
+<main class="main">
+<header>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="menu" onclick="toggleMenu()">☰</button>
+    <strong>⚡ ZEUSGPT</strong>
+  </div>
+  <span class="online">● Đã sẵn sàng</span>
+</header>
 
-    <section class="chat" id="chat">
-      <div class="welcome" id="welcome">
-        <div class="welcome-icon">⚡</div>
-        <h1>ZEUSGPT</h1>
-        <p class="subtitle">Trợ lý AI thông minh của bạn.<br>Hãy đặt câu hỏi để bắt đầu trò chuyện!</p>
-        <div class="suggestions">
-          <div class="suggestion" onclick="suggest('Giải thích cho tôi một kiến thức khoa học thú vị')">🧠 Kiến thức thú vị</div>
-          <div class="suggestion" onclick="suggest('Giúp tôi học tiếng Anh hiệu quả')">📚 Học tập</div>
-          <div class="suggestion" onclick="suggest('Viết cho tôi một website HTML đẹp')">💻 Viết code</div>
-          <div class="suggestion" onclick="suggest('Kể cho tôi một câu chuyện thú vị')">✨ Sáng tạo</div>
-        </div>
-      </div>
-      <div class="messages" id="messages"></div>
-    </section>
+<section class="chat" id="chat">
+  <div class="welcome" id="welcome">
+    <div class="thunder">⚡</div>
+    <h1>ZEUSGPT</h1>
+    <p class="desc">Trợ lý trí tuệ nhân tạo của bạn.<br>Hôm nay bạn muốn khám phá điều gì?</p>
+    <div class="cards">
+      <div class="card" onclick="suggest('Giải thích một kiến thức khoa học thú vị')">🧠 Kiến thức khoa học</div>
+      <div class="card" onclick="suggest('Giúp tôi học tập hiệu quả hơn')">📚 Học tập</div>
+      <div class="card" onclick="suggest('Viết cho tôi một trang web HTML đẹp')">💻 Viết code</div>
+      <div class="card" onclick="suggest('Kể cho tôi một câu chuyện thú vị')">✨ Sáng tạo</div>
+    </div>
+  </div>
+  <div class="messages" id="messages"></div>
+</section>
 
-    <footer class="composer-wrap">
-      <div class="composer">
-        <textarea id="prompt" rows="1" placeholder="Nhắn tin cho ZEUSGPT..." onkeydown="handleKey(event)"></textarea>
-        <button class="send" id="send" onclick="sendMessage()">➤</button>
-      </div>
-      <div class="hint">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
-    </footer>
-  </main>
+<footer class="bottom">
+  <div class="composer">
+    <textarea id="prompt" rows="1" placeholder="Nhắn tin cho ZEUSGPT..." onkeydown="handleKey(event)"></textarea>
+    <button class="send" id="send" onclick="sendMessage()">➤</button>
+  </div>
+  <div class="hint">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
+</footer>
+</main>
 </div>
 
 <script>
-const API_URL = "https://khanggpt.itzkenmcxd.workers.dev";
+const API_URL="https://khanggpt.itzkenmcxd.workers.dev";
+let chats=[];
+try{chats=JSON.parse(localStorage.getItem("zeus_chats")||"[]")}catch(e){chats=[]}
+let currentId=null;
+let messages=[];
+let busy=false;
 
-let chats = JSON.parse(localStorage.getItem("zeus_chats") || "[]");
-let currentId = null;
-let messages = [];
-let busy = false;
-
-const chatBox = document.getElementById("chat");
-const messagesBox = document.getElementById("messages");
-const welcome = document.getElementById("welcome");
-const promptBox = document.getElementById("prompt");
-const sendBtn = document.getElementById("send");
-
-function saveChats(){
-  localStorage.setItem("zeus_chats",JSON.stringify(chats));
-  renderHistory();
+const $=id=>document.getElementById(id);
+function save(){
+ localStorage.setItem("zeus_chats",JSON.stringify(chats));
+ renderHistory();
 }
 function renderHistory(){
-  const el=document.getElementById("history");
-  el.innerHTML="";
-  chats.forEach(c=>{
-    const item=document.createElement("div");
-    item.className="history-item"+(c.id===currentId?" active":"");
-    item.textContent=c.title;
-    item.onclick=()=>openChat(c.id);
-    el.appendChild(item);
-  });
+ $("history").innerHTML="";
+ chats.forEach(c=>{
+  const d=document.createElement("div");
+  d.className="item"+(c.id===currentId?" active":"");
+  d.textContent=c.title;
+  d.onclick=()=>openChat(c.id);
+  $("history").appendChild(d);
+ });
 }
 function newChat(){
-  currentId=null;
-  messages=[];
-  messagesBox.innerHTML="";
-  welcome.style.display="block";
-  promptBox.value="";
-  renderHistory();
-  document.getElementById("sidebar").classList.remove("open");
+ currentId=null;messages=[];
+ $("messages").innerHTML="";
+ $("welcome").style.display="block";
+ $("prompt").value="";
+ renderHistory();
+ $("sidebar").classList.remove("open");
 }
 function openChat(id){
-  const c=chats.find(x=>x.id===id);
-  if(!c)return;
-  currentId=id;
-  messages=JSON.parse(JSON.stringify(c.messages));
-  welcome.style.display="none";
-  messagesBox.innerHTML="";
-  messages.forEach(m=>addMessage(m.role,m.content));
-  renderHistory();
-  document.getElementById("sidebar").classList.remove("open");
+ const c=chats.find(x=>x.id===id);
+ if(!c)return;
+ currentId=id;
+ messages=JSON.parse(JSON.stringify(c.messages));
+ $("messages").innerHTML="";
+ $("welcome").style.display="none";
+ messages.forEach(m=>addMessage(m.role,m.content));
+ renderHistory();
+ $("sidebar").classList.remove("open");
 }
 function addMessage(role,content){
-  welcome.style.display="none";
-  const row=document.createElement("div");
-  row.className="message "+(role==="user"?"user":"assistant");
-
-  const avatar=document.createElement("div");
-  avatar.className="avatar";
-  avatar.textContent=role==="user"?"👤":"⚡";
-
-  const contentWrap=document.createElement("div");
-  contentWrap.className="message-content";
-
-  const name=document.createElement("div");
-  name.className="message-name";
-  name.textContent=role==="user"?"Bạn":"ZEUSGPT";
-
-  const bubble=document.createElement("div");
-  bubble.className="bubble";
-  bubble.textContent=content;
-
-  contentWrap.append(name,bubble);
-  row.append(avatar,contentWrap);
-  messagesBox.appendChild(row);
-  chatBox.scrollTop=chatBox.scrollHeight;
-  return bubble;
+ $("welcome").style.display="none";
+ const row=document.createElement("div");
+ row.className="message "+role;
+ const avatar=document.createElement("div");
+ avatar.className="avatar";
+ avatar.textContent=role==="user"?"👤":"⚡";
+ const wrap=document.createElement("div");
+ wrap.className="content";
+ const name=document.createElement("div");
+ name.className="name";
+ name.textContent=role==="user"?"Bạn":"ZEUSGPT";
+ const bubble=document.createElement("div");
+ bubble.className="bubble";
+ bubble.textContent=content;
+ wrap.append(name,bubble);
+ row.append(avatar,wrap);
+ $("messages").appendChild(row);
+ $("chat").scrollTop=$("chat").scrollHeight;
+ return bubble;
 }
 function saveCurrent(){
-  if(!messages.length)return;
-  if(!currentId)currentId=String(Date.now());
-  let c=chats.find(x=>x.id===currentId);
+ if(!messages.length)return;
+ if(!currentId)currentId=String(Date.now());
+ let c=chats.find(x=>x.id===currentId);
+ if(!c){
   const first=messages.find(m=>m.role==="user");
-  if(!c){
-    c={id:currentId,title:(first?.content||"Cuộc trò chuyện").slice(0,35),messages:[]};
-    chats.unshift(c);
-  }
-  c.messages=messages;
-  saveChats();
+  c={id:currentId,title:(first?.content||"Cuộc trò chuyện").slice(0,35),messages:[]};
+  chats.unshift(c);
+ }
+ c.messages=messages;
+ save();
 }
 async function sendMessage(){
-  const text=promptBox.value.trim();
-  if(!text||busy)return;
-
-  promptBox.value="";
-  promptBox.style.height="42px";
-  busy=true;
-  sendBtn.disabled=true;
-
-  messages.push({role:"user",content:text});
-  addMessage("user",text);
-  const loading=addMessage("assistant","ZEUSGPT đang suy nghĩ...");
+ const input=$("prompt");
+ const text=input.value.trim();
+ if(!text||busy)return;
+ input.value="";
+ input.style.height="42px";
+ busy=true;$("send").disabled=true;
+ messages.push({role:"user",content:text});
+ addMessage("user",text);
+ const loading=addMessage("assistant","ZEUSGPT đang suy nghĩ...");
+ saveCurrent();
+ try{
+  const res=await fetch(API_URL,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    app:"ZEUSGPT",
+    messages:messages.slice(-12)
+   })
+  });
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||"HTTP "+res.status);
+  const reply=data.reply||"AI chưa trả lời.";
+  loading.textContent=reply;
+  messages.push({role:"assistant",content:reply});
   saveCurrent();
-
-  try{
-    const response=await fetch(API_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        app:"ZEUSGPT",
-        messages:messages.slice(-12)
-      })
-    });
-
-    const data=await response.json();
-    if(!response.ok)throw new Error(data.error||"Lỗi máy chủ: "+response.status);
-
-    const reply=data.reply||data.response||data.result||"AI chưa trả về nội dung.";
-    loading.textContent=reply;
-    messages.push({role:"assistant",content:reply});
-    saveCurrent();
-  }catch(error){
-    loading.textContent="Không thể kết nối AI: "+error.message+
-      "\n\nHãy kiểm tra Cloudflare Worker và kết nối Internet.";
-  }finally{
-    busy=false;
-    sendBtn.disabled=false;
-    promptBox.focus();
-    chatBox.scrollTop=chatBox.scrollHeight;
-  }
-}
-function suggest(text){
-  promptBox.value=text;
-  sendMessage();
+ }catch(e){
+  loading.textContent="Không kết nối được ZEUSGPT: "+e.message+
+  "\nHãy kiểm tra Worker, AI binding và Internet.";
+ }finally{
+  busy=false;$("send").disabled=false;
+  input.focus();
+  $("chat").scrollTop=$("chat").scrollHeight;
+ }
 }
 function handleKey(e){
-  if(e.key==="Enter"&&!e.shiftKey){
-    e.preventDefault();
-    sendMessage();
-  }
+ if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}
 }
-promptBox.addEventListener("input",()=>{
-  promptBox.style.height="42px";
-  promptBox.style.height=Math.min(promptBox.scrollHeight,150)+"px";
+function suggest(text){$("prompt").value=text;sendMessage()}
+function toggleMenu(){$("sidebar").classList.toggle("open")}
+$("prompt").addEventListener("input",e=>{
+ e.target.style.height="42px";
+ e.target.style.height=Math.min(e.target.scrollHeight,130)+"px";
 });
-function toggleMenu(){
-  document.getElementById("sidebar").classList.toggle("open");
-}
 renderHistory();
 </script>
 </body>
