@@ -3,289 +3,389 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZEUSGPT ULTRA VISION</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEUSGPT ULTRA</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090b16;color:#f5f5ff;font-family:Arial,sans-serif;height:100vh;overflow:hidden}
-button,textarea{font:inherit}
-.app{height:100vh;display:flex}
-.sidebar{width:255px;background:#101323;border-right:1px solid #292d48;padding:20px;display:flex;flex-direction:column}
-.logo{font-size:25px;font-weight:900;color:#a78bfa;margin-bottom:25px}
-.new{padding:13px;background:linear-gradient(100deg,#7855e9,#347be9);border:0;border-radius:12px;color:white;cursor:pointer}
-.history{flex:1;overflow:auto;margin-top:20px}
-.history button{width:100%;display:block;text-align:left;padding:12px;background:transparent;color:#aaa;border:0;border-radius:9px;cursor:pointer}
-.history button:hover{background:#252944;color:white}
-.sidebottom{font-size:12px;color:#777}
+:root{--bg:#080b16;--panel:#101629;--line:#26314d;--text:#f3f5ff;--muted:#929bb5;--purple:#8058ff;--blue:#328cff}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;height:100vh;overflow:hidden}
+button,input,textarea{font:inherit}
+.app{display:flex;height:100vh}
+.sidebar{width:270px;background:#0c1120;border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:14px}
+.logo{font-size:23px;font-weight:900;background:linear-gradient(90deg,#a58aff,#48b8ff);background-clip:text;color:transparent}
+.new{background:linear-gradient(100deg,var(--purple),var(--blue));border:0;color:white;padding:13px;border-radius:12px;cursor:pointer;font-weight:bold}
+.side-title{font-size:12px;color:var(--muted);margin-top:12px}
+.history{overflow:auto;flex:1}
+.chat-item{padding:12px;border-radius:10px;color:#c9d1e8;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.chat-item.active,.chat-item:hover{background:#1a2440}
+.side-bottom{font-size:12px;color:var(--muted);line-height:1.6}
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
-.top{height:65px;border-bottom:1px solid #292d48;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
-.online{color:#62e6ae;font-size:12px}
-.messages{flex:1;overflow:auto;padding:25px max(18px,calc((100% - 850px)/2))}
-.welcome{text-align:center;margin:12vh auto 30px}
-.welcome h1{font-size:38px;background:linear-gradient(90deg,#a78bfa,#48c8ff);background-clip:text;color:transparent}
-.welcome p{color:#9299b5}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:580px;margin:25px auto}
-.card{padding:18px;background:#151a2c;border:1px solid #292e49;border-radius:14px;color:#d5d9f5;text-align:left}
-.msg{display:flex;gap:12px;margin:20px 0;align-items:flex-start}
-.avatar{width:35px;height:35px;border-radius:11px;background:#292d4b;display:grid;place-items:center;flex-shrink:0}
-.content{background:#151a2b;border:1px solid #292e49;padding:14px 16px;border-radius:14px;max-width:85%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
-.user .content{background:#252044;border-color:#493a75}
-.content img{display:block;max-width:280px;max-height:240px;object-fit:contain;border-radius:10px;margin-top:10px}
-.composer{width:100%;max-width:900px;margin:auto;padding:12px 18px 20px}
-.preview{display:none;margin-bottom:12px;background:#151a2b;padding:10px;border-radius:12px}
-.preview img{width:110px;height:90px;object-fit:cover;border-radius:9px;vertical-align:middle}
-.preview button{margin-left:12px}
-.inputbox{background:#171b2c;border:1px solid #343957;border-radius:17px;padding:11px;display:flex;align-items:flex-end;gap:9px}
-textarea{flex:1;min-width:0;resize:none;max-height:120px;min-height:35px;padding:9px;background:transparent;border:0;outline:0;color:white}
-.tool{background:#292e49;color:#fff;border:1px solid #444b70;padding:11px;border-radius:11px;cursor:pointer}
-.photo{background:linear-gradient(100deg,#8055ed,#397fe8);color:white;border:0;padding:12px 15px;border-radius:11px;cursor:pointer;white-space:nowrap}
-.send{background:#7957e9;color:white;border:0;padding:12px 16px;border-radius:11px;cursor:pointer}
-button:disabled{opacity:.5;cursor:wait}
-.note{text-align:center;color:#777e98;font-size:11px;margin-top:10px}
-@media(max-width:650px){
-.sidebar{width:65px;padding:12px 7px}
-.logo{font-size:12px;writing-mode:vertical-rl;margin:10px auto 20px}
-.new{font-size:0;padding:12px}
-.new:after{content:"+";font-size:22px}
-.history button{font-size:0;padding:10px}
-.history button:before{content:"💬";font-size:17px}
-.sidebottom{display:none}
-.top{padding:0 12px}
-.messages{padding:15px}
+.top{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.top strong{font-size:17px}
+.status{font-size:12px;color:#6ce3ae}
+.messages{flex:1;overflow-y:auto;padding:25px max(18px,calc((100% - 850px)/2))}
+.welcome{text-align:center;margin:12vh auto 30px;max-width:600px}
+.welcome .symbol{font-size:55px}
+.welcome h1{font-size:35px;margin:15px 0 8px;background:linear-gradient(90deg,#a58aff,#48b8ff);background-clip:text;color:transparent}
+.welcome p{color:var(--muted);line-height:1.6}
+.suggestions{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:25px}
+.suggestions button{background:#131c32;border:1px solid var(--line);color:#dce3ff;padding:10px 13px;border-radius:12px;cursor:pointer}
+.message{display:flex;gap:12px;margin:22px 0;align-items:flex-start}
+.avatar{width:35px;height:35px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;background:#25204a}
+.message.user .avatar{background:#17345b}
+.bubble{max-width:100%;min-width:0;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.message.user .bubble{background:#151f36;border:1px solid #293a5c;padding:12px 15px;border-radius:14px}
+.message img{display:block;max-width:min(320px,100%);max-height:260px;object-fit:contain;border-radius:12px;margin-bottom:10px}
+.copy{background:none;border:0;color:var(--muted);cursor:pointer;font-size:12px;margin-top:8px}
+.composer-area{padding:12px 18px 18px}
+.composer{max-width:850px;margin:auto;background:#111a2d;border:1px solid #34415f;border-radius:18px;padding:12px}
+.preview{display:none;padding:4px 5px 12px}
+.preview img{width:85px;height:85px;object-fit:cover;border-radius:10px}
+.remove{border:0;background:#452337;color:white;border-radius:8px;padding:6px 10px;cursor:pointer;margin-left:8px}
+textarea{width:100%;resize:none;max-height:150px;min-height:48px;background:transparent;border:0;outline:0;color:white;padding:10px}
+.tools{display:flex;align-items:center;gap:9px}
+.tool{border:1px solid var(--line);background:#18233b;color:#dce5ff;border-radius:10px;padding:10px 12px;cursor:pointer}
+.send{margin-left:auto;background:linear-gradient(100deg,var(--purple),var(--blue));border:0;color:white;padding:11px 17px;border-radius:11px;cursor:pointer;font-weight:bold}
+.send:disabled{opacity:.5;cursor:not-allowed}
+.note{text-align:center;color:#78839e;font-size:11px;margin-top:10px}
+.menu{display:none;background:none;border:0;color:white;font-size:22px}
+@media(max-width:700px){
+.sidebar{position:fixed;z-index:5;left:-280px;top:0;bottom:0;transition:.2s}
+.sidebar.open{left:0}
+.menu{display:block}
+.messages{padding:18px 14px}
+.welcome{margin-top:10vh}
 .welcome h1{font-size:29px}
-.cards{grid-template-columns:1fr}
-.composer{padding:10px}
-.photo{font-size:12px;padding:11px 9px}
-.tool{padding:10px}
-.send{padding:11px}
-.content{max-width:90%}
+.top{padding:0 14px}
 }
 </style>
 </head>
 <body>
 <div class="app">
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
 <div class="logo">⚡ ZEUSGPT</div>
 <button class="new" onclick="newChat()">＋ Cuộc trò chuyện mới</button>
+<div class="side-title">LỊCH SỬ TRÒ CHUYỆN</div>
 <div class="history" id="history"></div>
-<div class="sidebottom">ZEUSGPT ULTRA VISION<br>AI Assistant</div>
+<div class="side-bottom">ZEUSGPT ULTRA<br>AI Assistant • Shared Worker</div>
 </aside>
 
 <main class="main">
 <header class="top">
-<strong>ZEUSGPT <span style="color:#a78bfa">ULTRA VISION</span></strong>
-<span class="online">● ONLINE</span>
+<div style="display:flex;align-items:center;gap:12px">
+<button class="menu" onclick="toggleMenu()">☰</button>
+<strong>ZEUSGPT <span style="color:#9b82ff">ULTRA</span></strong>
+</div>
+<span class="status">● AI Assistant</span>
 </header>
 
 <section class="messages" id="messages">
-<div class="welcome">
-<h1>Xin chào! ⚡</h1>
-<p>Mình là ZEUSGPT. Bạn cần mình giúp gì hôm nay?</p>
-<div class="cards">
-<div class="card">📚 Học tập<br><small>Giải bài và giải thích</small></div>
-<div class="card">💻 Lập trình<br><small>Viết và sửa code</small></div>
-<div class="card">📷 Phân tích ảnh<br><small>Gửi ảnh để AI xem</small></div>
-<div class="card">💡 Sáng tạo<br><small>Khám phá ý tưởng</small></div>
+<div class="welcome" id="welcome">
+<div class="symbol">⚡</div>
+<h1>ZEUSGPT ULTRA</h1>
+<p>Xin chào! Tôi có thể giúp bạn học tập, viết code, giải đáp câu hỏi và phân tích hình ảnh.</p>
+<div class="suggestions">
+<button onclick="quick('Giới thiệu về bạn đi')">Giới thiệu bản thân</button>
+<button onclick="quick('Giúp tôi học tập')">Học tập</button>
+<button onclick="quick('Viết cho tôi một trang web HTML')">Viết code</button>
 </div>
 </div>
 </section>
 
+<footer class="composer-area">
 <div class="composer">
 <div class="preview" id="preview">
 <img id="previewImg" alt="Ảnh xem trước">
-<button class="tool" onclick="removeImage()">✕ Xóa ảnh</button>
+<button class="remove" onclick="removeImage()">Xóa ảnh</button>
 </div>
-
-<div class="inputbox">
-<button class="tool" onclick="document.getElementById('fileInput').click()" title="Chọn ảnh">📎</button>
-<button class="photo" onclick="document.getElementById('fileInput').click()">📷 Gửi ảnh</button>
-<input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-<textarea id="prompt" rows="1" placeholder="Nhắn tin cho ZEUSGPT..."></textarea>
-<button class="send" id="sendBtn" onclick="sendMessage()">Gửi ➤</button>
+<textarea id="prompt" placeholder="Nhắn tin cho ZEUSGPT..." rows="1"></textarea>
+<div class="tools">
+<button class="tool" onclick="document.getElementById('file').click()">＋ Ảnh</button>
+<input id="file" type="file" accept="image/*" hidden onchange="chooseImage(event)">
+<button class="tool" onclick="clearInput()">Xóa</button>
+<button class="send" id="send" onclick="sendMessage()">Gửi ➤</button>
+</div>
 </div>
 <div class="note">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
-</div>
+</footer>
 </main>
 </div>
 
 <script>
-const API="https://khanggpt.itzkenmcxd.workers.dev";
-const STORAGE="zeus_ultra_vision_v2";
-let chats=JSON.parse(localStorage.getItem(STORAGE)||"[]");
-let current=null;
-let selectedImage="";
+const API_URL = "https://khanggpt.itzkenmcxd.workers.dev";
+const APP_NAME = "ZEUSGPT";
 
-const messagesEl=document.getElementById("messages");
-const promptEl=document.getElementById("prompt");
-const fileInput=document.getElementById("fileInput");
-const sendBtn=document.getElementById("sendBtn");
+let chats = [];
+let currentChat = null;
+let selectedImage = null;
+let busy = false;
 
-function save(){
- localStorage.setItem(STORAGE,JSON.stringify(chats));
- renderHistory();
+const messagesEl = document.getElementById("messages");
+const promptEl = document.getElementById("prompt");
+
+function createChat(){
+  return {
+    id: Date.now() + Math.random(),
+    title: "Cuộc trò chuyện mới",
+    messages: []
+  };
 }
 
 function newChat(){
- current={id:Date.now(),title:"Cuộc trò chuyện mới",messages:[]};
- chats.unshift(current);
- save();
- renderChat();
+  currentChat = createChat();
+  chats.unshift(currentChat);
+  selectedImage = null;
+  updatePreview();
+  render();
+  promptEl.value = "";
+  promptEl.focus();
+  document.getElementById("sidebar").classList.remove("open");
+}
+
+function selectChat(id){
+  currentChat = chats.find(c => c.id === id);
+  render();
+  document.getElementById("sidebar").classList.remove("open");
 }
 
 function renderHistory(){
- const el=document.getElementById("history");
- el.innerHTML="";
- chats.forEach(c=>{
-  const b=document.createElement("button");
-  b.textContent=c.title;
-  b.title=c.title;
-  b.onclick=()=>{current=c;renderChat();renderHistory()};
-  if(current&&current.id===c.id)b.style.background="#252944";
-  el.appendChild(b);
- });
+  const el = document.getElementById("history");
+  el.innerHTML = "";
+  chats.forEach(chat => {
+    const item = document.createElement("div");
+    item.className = "chat-item" + (currentChat && currentChat.id === chat.id ? " active" : "");
+    item.textContent = chat.title;
+    item.onclick = () => selectChat(chat.id);
+    el.appendChild(item);
+  });
 }
 
-function renderChat(){
- messagesEl.innerHTML="";
- if(!current||!current.messages.length){
-  const welcome=document.createElement("div");
-  welcome.className="welcome";
-  welcome.innerHTML='<h1>Xin chào! ⚡</h1><p>Mình là ZEUSGPT. Bạn cần mình giúp gì hôm nay?</p><div class="cards"><div class="card">📚 Học tập<br><small>Giải bài và giải thích</small></div><div class="card">💻 Lập trình<br><small>Viết và sửa code</small></div><div class="card">📷 Phân tích ảnh<br><small>Gửi ảnh để AI xem</small></div><div class="card">💡 Sáng tạo<br><small>Khám phá ý tưởng</small></div></div>';
-  messagesEl.appendChild(welcome);
-  return;
- }
- current.messages.forEach(m=>addBubble(m.role,m.content,m.image,false));
+function render(){
+  renderHistory();
+  messagesEl.innerHTML = "";
+
+  if(!currentChat || currentChat.messages.length === 0){
+    messagesEl.innerHTML = `
+      <div class="welcome" id="welcome">
+        <div class="symbol">⚡</div>
+        <h1>ZEUSGPT ULTRA</h1>
+        <p>Xin chào! Tôi có thể giúp bạn học tập, viết code, giải đáp câu hỏi và phân tích hình ảnh.</p>
+        <div class="suggestions">
+          <button onclick="quick('Giới thiệu về bạn đi')">Giới thiệu bản thân</button>
+          <button onclick="quick('Giúp tôi học tập')">Học tập</button>
+          <button onclick="quick('Viết cho tôi một trang web HTML')">Viết code</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  currentChat.messages.forEach(m => addMessage(m.role,m.content,m.image,false));
+  messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-function addBubble(role,text,image,scroll=true){
- const row=document.createElement("div");
- row.className="msg "+(role==="user"?"user":"");
- const avatar=document.createElement("div");
- avatar.className="avatar";
- avatar.textContent=role==="user"?"👤":"⚡";
- const box=document.createElement("div");
- box.className="content";
- box.textContent=text||"";
- if(image){
-  const img=document.createElement("img");
-  img.src=image;
-  img.alt="Ảnh đã gửi";
-  box.appendChild(img);
- }
- row.append(avatar,box);
- messagesEl.appendChild(row);
- if(scroll)messagesEl.scrollTop=messagesEl.scrollHeight;
- return box;
+function addMessage(role, content, image = null, scroll = true){
+  const row = document.createElement("div");
+  row.className = "message " + role;
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = role === "user" ? "👤" : "⚡";
+
+  const body = document.createElement("div");
+  body.style.minWidth = "0";
+  body.style.flex = "1";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  if(image){
+    const img = document.createElement("img");
+    img.src = image;
+    img.alt = "Ảnh đính kèm";
+    bubble.appendChild(img);
+  }
+
+  const text = document.createElement("div");
+  text.textContent = content;
+  bubble.appendChild(text);
+  body.appendChild(bubble);
+
+  if(role === "assistant" && content){
+    const copy = document.createElement("button");
+    copy.className = "copy";
+    copy.textContent = "Sao chép";
+    copy.onclick = () => {
+      navigator.clipboard.writeText(content)
+        .then(() => copy.textContent = "Đã sao chép");
+    };
+    body.appendChild(copy);
+  }
+
+  row.append(avatar,body);
+  messagesEl.appendChild(row);
+
+  if(scroll) messagesEl.scrollTop = messagesEl.scrollHeight;
+  return row;
+}
+
+function chooseImage(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  if(!file.type.startsWith("image/")){
+    alert("Vui lòng chọn file ảnh.");
+    return;
+  }
+
+  if(file.size > 4 * 1024 * 1024){
+    alert("Ảnh quá lớn. Hãy chọn ảnh dưới 4 MB.");
+    event.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    selectedImage = reader.result;
+    updatePreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function updatePreview(){
+  const box = document.getElementById("preview");
+  if(selectedImage){
+    box.style.display = "block";
+    document.getElementById("previewImg").src = selectedImage;
+  }else{
+    box.style.display = "none";
+    document.getElementById("previewImg").removeAttribute("src");
+  }
 }
 
 function removeImage(){
- selectedImage="";
- fileInput.value="";
- document.getElementById("preview").style.display="none";
+  selectedImage = null;
+  document.getElementById("file").value = "";
+  updatePreview();
 }
 
-fileInput.addEventListener("change",event=>{
- const file=event.target.files[0];
- if(!file)return;
- if(!file.type.startsWith("image/")){
-  alert("Vui lòng chọn một tệp ảnh.");
-  return;
- }
- if(file.size>8*1024*1024){
-  alert("Ảnh quá lớn. Hãy chọn ảnh nhỏ hơn 8 MB.");
-  fileInput.value="";
-  return;
- }
- const reader=new FileReader();
- reader.onload=()=>{
-  const img=new Image();
-  img.onload=()=>{
-   const max=1280;
-   const scale=Math.min(1,max/Math.max(img.width,img.height));
-   const canvas=document.createElement("canvas");
-   canvas.width=Math.round(img.width*scale);
-   canvas.height=Math.round(img.height*scale);
-   canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
-   selectedImage=canvas.toDataURL("image/jpeg",0.82);
-   document.getElementById("previewImg").src=selectedImage;
-   document.getElementById("preview").style.display="block";
-  };
-  img.onerror=()=>alert("Không đọc được ảnh.");
-  img.src=reader.result;
- };
- reader.readAsDataURL(file);
-});
+function clearInput(){
+  promptEl.value = "";
+  removeImage();
+}
+
+function quick(text){
+  promptEl.value = text;
+  sendMessage();
+}
 
 async function sendMessage(){
- const text=promptEl.value.trim();
- if(!text&&!selectedImage)return;
- if(!current)newChat();
+  const text = promptEl.value.trim();
+  if(busy) return;
 
- const image=selectedImage;
- const userMessage={
-  role:"user",
-  content:text||"Hãy phân tích ảnh này.",
-  image:image||null
- };
-
- current.messages.push(userMessage);
- if(current.messages.length===1){
-  current.title=(text||"Phân tích ảnh").slice(0,28);
- }
- addBubble("user",userMessage.content,image);
- promptEl.value="";
- removeImage();
- save();
-
- sendBtn.disabled=true;
- const waiting=addBubble("assistant","ZEUSGPT đang suy nghĩ...");
-
- try{
-  const history=current.messages.map(m=>({
-   role:m.role,
-   content:m.content
-  }));
-
-  const response=await fetch(API,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-    app:"ZEUSGPT",
-    messages:history,
-    image:image||""
-   })
-  });
-
-  const data=await response.json();
-  if(!response.ok||!data.reply){
-   throw new Error(data.error||"AI không trả về câu trả lời.");
+  if(!text && !selectedImage){
+    promptEl.focus();
+    return;
   }
 
-  waiting.textContent=data.reply;
-  current.messages.push({role:"assistant",content:data.reply});
-  save();
- }catch(error){
-  waiting.textContent="⚠️ "+error.message;
- }
+  if(!currentChat){
+    currentChat = createChat();
+    chats.unshift(currentChat);
+  }
 
- sendBtn.disabled=false;
- messagesEl.scrollTop=messagesEl.scrollHeight;
+  const image = selectedImage;
+  const content = text || "Hãy phân tích hình ảnh này.";
+
+  currentChat.messages.push({
+    role:"user",
+    content,
+    image
+  });
+
+  if(currentChat.title === "Cuộc trò chuyện mới"){
+    currentChat.title = content.slice(0,32) || "Phân tích hình ảnh";
+  }
+
+  promptEl.value = "";
+  removeImage();
+  render();
+  busy = true;
+  document.getElementById("send").disabled = true;
+
+  const loading = addMessage("assistant","Đang suy nghĩ...");
+
+  try{
+    const history = currentChat.messages.map(m => ({
+      role:m.role,
+      content:m.content
+    }));
+
+    const response = await fetch(API_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        app:APP_NAME,
+        messages:history,
+        ...(image ? {image:image} : {})
+      })
+    });
+
+    let data;
+    try{
+      data = await response.json();
+    }catch{
+      throw new Error("Worker không trả về JSON hợp lệ.");
+    }
+
+    if(!response.ok || !data.reply){
+      throw new Error(
+        (data.error || "AI không trả về câu trả lời.") +
+        (data.details ? "\nChi tiết: " + data.details : "")
+      );
+    }
+
+    loading.querySelector(".bubble").textContent = data.reply;
+
+    const copy = document.createElement("button");
+    copy.className = "copy";
+    copy.textContent = "Sao chép";
+    copy.onclick = () => {
+      navigator.clipboard.writeText(data.reply)
+        .then(() => copy.textContent = "Đã sao chép");
+    };
+    loading.querySelector("div:nth-child(2)").appendChild(copy);
+
+    currentChat.messages.push({
+      role:"assistant",
+      content:data.reply
+    });
+
+  }catch(error){
+    const message = "⚠️ " + (error.message || "Không thể kết nối AI.");
+    loading.querySelector(".bubble").textContent = message;
+    currentChat.messages.push({
+      role:"assistant",
+      content:message
+    });
+  }finally{
+    busy = false;
+    document.getElementById("send").disabled = false;
+    renderHistory();
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+}
+
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("open");
 }
 
 promptEl.addEventListener("keydown",e=>{
- if(e.key==="Enter"&&!e.shiftKey){
-  e.preventDefault();
-  sendMessage();
- }
+  if(e.key === "Enter" && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
 });
-
-renderHistory();
-if(chats.length){
- current=chats[0];
- renderChat();
-}else{
- newChat();
-}
 </script>
 </body>
 </html>
