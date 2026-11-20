@@ -4,49 +4,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZEUSGPT ULTRA</title>
+<title>ZEUSGPT ULTRA VISION</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#090b16;color:#f5f5ff;font-family:Arial,sans-serif;height:100vh;overflow:hidden}
-button,input{font:inherit}
-.app{display:flex;height:100vh}
-.sidebar{width:260px;background:#101323;border-right:1px solid #252943;padding:20px;display:flex;flex-direction:column}
-.logo{font-size:25px;font-weight:900;background:linear-gradient(90deg,#9b7cff,#38c8ff);background-clip:text;color:transparent;margin-bottom:25px}
-.new{background:linear-gradient(100deg,#7855e9,#347be9);border:0;color:white;padding:13px;border-radius:12px;cursor:pointer}
-.history{margin-top:22px;overflow:auto;flex:1}
-.history button{display:block;width:100%;text-align:left;background:transparent;color:#bbb;border:0;padding:12px;border-radius:9px;cursor:pointer;margin-bottom:5px}
-.history button:hover,.history button.active{background:#252944;color:white}
-.sidebottom{color:#777;font-size:12px}
+button,textarea{font:inherit}
+.app{height:100vh;display:flex}
+.sidebar{width:255px;background:#101323;border-right:1px solid #292d48;padding:20px;display:flex;flex-direction:column}
+.logo{font-size:25px;font-weight:900;color:#a78bfa;margin-bottom:25px}
+.new{padding:13px;background:linear-gradient(100deg,#7855e9,#347be9);border:0;border-radius:12px;color:white;cursor:pointer}
+.history{flex:1;overflow:auto;margin-top:20px}
+.history button{width:100%;display:block;text-align:left;padding:12px;background:transparent;color:#aaa;border:0;border-radius:9px;cursor:pointer}
+.history button:hover{background:#252944;color:white}
+.sidebottom{font-size:12px;color:#777}
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
-.top{height:65px;border-bottom:1px solid #24263b;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
-.status{color:#6ce6b0;font-size:12px}
+.top{height:65px;border-bottom:1px solid #292d48;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.online{color:#62e6ae;font-size:12px}
 .messages{flex:1;overflow:auto;padding:25px max(18px,calc((100% - 850px)/2))}
-.welcome{text-align:center;margin:12vh auto 30px;max-width:600px}
+.welcome{text-align:center;margin:12vh auto 30px}
 .welcome h1{font-size:38px;background:linear-gradient(90deg,#a78bfa,#48c8ff);background-clip:text;color:transparent}
-.welcome p{color:#969bb5}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:25px}
-.card{background:#151a2c;border:1px solid #292e49;border-radius:13px;padding:17px;color:#c9cbea;text-align:left}
+.welcome p{color:#9299b5}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:580px;margin:25px auto}
+.card{padding:18px;background:#151a2c;border:1px solid #292e49;border-radius:14px;color:#d5d9f5;text-align:left}
 .msg{display:flex;gap:12px;margin:20px 0;align-items:flex-start}
-.avatar{width:34px;height:34px;border-radius:11px;background:#25294a;display:grid;place-items:center;flex-shrink:0}
+.avatar{width:35px;height:35px;border-radius:11px;background:#292d4b;display:grid;place-items:center;flex-shrink:0}
 .content{background:#151a2b;border:1px solid #292e49;padding:14px 16px;border-radius:14px;max-width:85%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
 .user .content{background:#252044;border-color:#493a75}
-.content img{max-width:260px;max-height:240px;display:block;border-radius:10px;margin-top:8px}
-.composer{padding:12px 18px 20px;max-width:900px;width:100%;margin:auto}
-.preview{display:none;margin-bottom:10px}
-.preview img{width:90px;height:75px;object-fit:cover;border-radius:10px}
-.preview button{margin-left:8px;background:#38263a;color:white;border:0;padding:8px;border-radius:8px}
-.inputbox{display:flex;align-items:center;gap:8px;background:#171b2c;border:1px solid #343957;border-radius:17px;padding:10px}
-.inputbox textarea{flex:1;background:transparent;border:0;outline:0;color:white;resize:none;min-height:28px;max-height:120px;padding:7px}
-.tool{background:#272c46;border:0;color:#dce0ff;border-radius:10px;padding:10px;cursor:pointer}
-.send{background:linear-gradient(100deg,#8055ed,#3289ef);border:0;color:white;border-radius:11px;padding:11px 15px;cursor:pointer}
-.send:disabled{opacity:.5}
-.note{text-align:center;color:#747b96;font-size:11px;margin-top:9px}
+.content img{display:block;max-width:280px;max-height:240px;object-fit:contain;border-radius:10px;margin-top:10px}
+.composer{width:100%;max-width:900px;margin:auto;padding:12px 18px 20px}
+.preview{display:none;margin-bottom:12px;background:#151a2b;padding:10px;border-radius:12px}
+.preview img{width:110px;height:90px;object-fit:cover;border-radius:9px;vertical-align:middle}
+.preview button{margin-left:12px}
+.inputbox{background:#171b2c;border:1px solid #343957;border-radius:17px;padding:11px;display:flex;align-items:flex-end;gap:9px}
+textarea{flex:1;min-width:0;resize:none;max-height:120px;min-height:35px;padding:9px;background:transparent;border:0;outline:0;color:white}
+.tool{background:#292e49;color:#fff;border:1px solid #444b70;padding:11px;border-radius:11px;cursor:pointer}
+.photo{background:linear-gradient(100deg,#8055ed,#397fe8);color:white;border:0;padding:12px 15px;border-radius:11px;cursor:pointer;white-space:nowrap}
+.send{background:#7957e9;color:white;border:0;padding:12px 16px;border-radius:11px;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+.note{text-align:center;color:#777e98;font-size:11px;margin-top:10px}
 @media(max-width:650px){
 .sidebar{width:65px;padding:12px 7px}
-.logo{font-size:12px;writing-mode:vertical-rl;margin:8px auto 20px}
+.logo{font-size:12px;writing-mode:vertical-rl;margin:10px auto 20px}
 .new{font-size:0;padding:12px}
 .new:after{content:"+";font-size:22px}
-.history button{font-size:0;padding:10px;text-align:center}
+.history button{font-size:0;padding:10px}
 .history button:before{content:"💬";font-size:17px}
 .sidebottom{display:none}
 .top{padding:0 12px}
@@ -54,6 +55,9 @@ button,input{font:inherit}
 .welcome h1{font-size:29px}
 .cards{grid-template-columns:1fr}
 .composer{padding:10px}
+.photo{font-size:12px;padding:11px 9px}
+.tool{padding:10px}
+.send{padding:11px}
 .content{max-width:90%}
 }
 </style>
@@ -61,7 +65,7 @@ button,input{font:inherit}
 <body>
 <div class="app">
 <aside class="sidebar">
-<div class="logo">ZEUSGPT ⚡</div>
+<div class="logo">⚡ ZEUSGPT</div>
 <button class="new" onclick="newChat()">＋ Cuộc trò chuyện mới</button>
 <div class="history" id="history"></div>
 <div class="sidebottom">ZEUSGPT ULTRA VISION<br>AI Assistant</div>
@@ -69,19 +73,19 @@ button,input{font:inherit}
 
 <main class="main">
 <header class="top">
-<strong>ZEUSGPT <span style="color:#a78bfa">ULTRA</span></strong>
-<span class="status">● ONLINE</span>
+<strong>ZEUSGPT <span style="color:#a78bfa">ULTRA VISION</span></strong>
+<span class="online">● ONLINE</span>
 </header>
 
 <section class="messages" id="messages">
-<div class="welcome" id="welcome">
+<div class="welcome">
 <h1>Xin chào! ⚡</h1>
-<p>Mình là ZEUSGPT. Hôm nay bạn muốn làm gì?</p>
+<p>Mình là ZEUSGPT. Bạn cần mình giúp gì hôm nay?</p>
 <div class="cards">
-<div class="card">📚 Học tập<br><small>Giải thích bài học</small></div>
-<div class="card">💻 Lập trình<br><small>Hỗ trợ viết code</small></div>
-<div class="card">🖼️ Phân tích ảnh<br><small>Gửi ảnh và đặt câu hỏi</small></div>
-<div class="card">💡 Sáng tạo<br><small>Ý tưởng mới</small></div>
+<div class="card">📚 Học tập<br><small>Giải bài và giải thích</small></div>
+<div class="card">💻 Lập trình<br><small>Viết và sửa code</small></div>
+<div class="card">📷 Phân tích ảnh<br><small>Gửi ảnh để AI xem</small></div>
+<div class="card">💡 Sáng tạo<br><small>Khám phá ý tưởng</small></div>
 </div>
 </div>
 </section>
@@ -89,13 +93,15 @@ button,input{font:inherit}
 <div class="composer">
 <div class="preview" id="preview">
 <img id="previewImg" alt="Ảnh xem trước">
-<button onclick="removeImage()">Xóa ảnh ✕</button>
+<button class="tool" onclick="removeImage()">✕ Xóa ảnh</button>
 </div>
+
 <div class="inputbox">
-<button class="tool" onclick="document.getElementById('file').click()" title="Chọn ảnh">＋</button>
-<input id="file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
-<textarea id="prompt" placeholder="Nhắn tin cho ZEUSGPT..." rows="1"></textarea>
-<button class="send" id="send" onclick="sendMessage()">Gửi ➤</button>
+<button class="tool" onclick="document.getElementById('fileInput').click()" title="Chọn ảnh">📎</button>
+<button class="photo" onclick="document.getElementById('fileInput').click()">📷 Gửi ảnh</button>
+<input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+<textarea id="prompt" rows="1" placeholder="Nhắn tin cho ZEUSGPT..."></textarea>
+<button class="send" id="sendBtn" onclick="sendMessage()">Gửi ➤</button>
 </div>
 <div class="note">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
 </div>
@@ -104,44 +110,53 @@ button,input{font:inherit}
 
 <script>
 const API="https://khanggpt.itzkenmcxd.workers.dev";
-const STORE="zeus_ultra_chats";
-let chats=JSON.parse(localStorage.getItem(STORE)||"[]");
+const STORAGE="zeus_ultra_vision_v2";
+let chats=JSON.parse(localStorage.getItem(STORAGE)||"[]");
 let current=null;
 let selectedImage="";
 
 const messagesEl=document.getElementById("messages");
 const promptEl=document.getElementById("prompt");
-const sendBtn=document.getElementById("send");
+const fileInput=document.getElementById("fileInput");
+const sendBtn=document.getElementById("sendBtn");
 
 function save(){
- localStorage.setItem(STORE,JSON.stringify(chats));
+ localStorage.setItem(STORAGE,JSON.stringify(chats));
  renderHistory();
 }
+
 function newChat(){
  current={id:Date.now(),title:"Cuộc trò chuyện mới",messages:[]};
  chats.unshift(current);
  save();
  renderChat();
 }
+
 function renderHistory(){
  const el=document.getElementById("history");
  el.innerHTML="";
  chats.forEach(c=>{
   const b=document.createElement("button");
   b.textContent=c.title;
-  b.className=current?.id===c.id?"active":"";
+  b.title=c.title;
   b.onclick=()=>{current=c;renderChat();renderHistory()};
+  if(current&&current.id===c.id)b.style.background="#252944";
   el.appendChild(b);
  });
 }
+
 function renderChat(){
  messagesEl.innerHTML="";
- if(!current || !current.messages.length){
-  messagesEl.innerHTML=document.getElementById("welcome").outerHTML;
+ if(!current||!current.messages.length){
+  const welcome=document.createElement("div");
+  welcome.className="welcome";
+  welcome.innerHTML='<h1>Xin chào! ⚡</h1><p>Mình là ZEUSGPT. Bạn cần mình giúp gì hôm nay?</p><div class="cards"><div class="card">📚 Học tập<br><small>Giải bài và giải thích</small></div><div class="card">💻 Lập trình<br><small>Viết và sửa code</small></div><div class="card">📷 Phân tích ảnh<br><small>Gửi ảnh để AI xem</small></div><div class="card">💡 Sáng tạo<br><small>Khám phá ý tưởng</small></div></div>';
+  messagesEl.appendChild(welcome);
   return;
  }
  current.messages.forEach(m=>addBubble(m.role,m.content,m.image,false));
 }
+
 function addBubble(role,text,image,scroll=true){
  const row=document.createElement("div");
  row.className="msg "+(role==="user"?"user":"");
@@ -162,21 +177,23 @@ function addBubble(role,text,image,scroll=true){
  if(scroll)messagesEl.scrollTop=messagesEl.scrollHeight;
  return box;
 }
+
 function removeImage(){
  selectedImage="";
- document.getElementById("file").value="";
+ fileInput.value="";
  document.getElementById("preview").style.display="none";
 }
-document.getElementById("file").addEventListener("change",e=>{
- const file=e.target.files[0];
+
+fileInput.addEventListener("change",event=>{
+ const file=event.target.files[0];
  if(!file)return;
  if(!file.type.startsWith("image/")){
-  alert("Vui lòng chọn tệp hình ảnh.");
+  alert("Vui lòng chọn một tệp ảnh.");
   return;
  }
  if(file.size>8*1024*1024){
-  alert("Ảnh quá lớn. Hãy chọn ảnh dưới 8 MB.");
-  e.target.value="";
+  alert("Ảnh quá lớn. Hãy chọn ảnh nhỏ hơn 8 MB.");
+  fileInput.value="";
   return;
  }
  const reader=new FileReader();
@@ -193,7 +210,7 @@ document.getElementById("file").addEventListener("change",e=>{
    document.getElementById("previewImg").src=selectedImage;
    document.getElementById("preview").style.display="block";
   };
-  img.onerror=()=>alert("Không đọc được ảnh này.");
+  img.onerror=()=>alert("Không đọc được ảnh.");
   img.src=reader.result;
  };
  reader.readAsDataURL(file);
@@ -205,7 +222,12 @@ async function sendMessage(){
  if(!current)newChat();
 
  const image=selectedImage;
- const userMessage={role:"user",content:text||"Hãy phân tích ảnh này.",image:image||null};
+ const userMessage={
+  role:"user",
+  content:text||"Hãy phân tích ảnh này.",
+  image:image||null
+ };
+
  current.messages.push(userMessage);
  if(current.messages.length===1){
   current.title=(text||"Phân tích ảnh").slice(0,28);
@@ -217,11 +239,13 @@ async function sendMessage(){
 
  sendBtn.disabled=true;
  const waiting=addBubble("assistant","ZEUSGPT đang suy nghĩ...");
+
  try{
   const history=current.messages.map(m=>({
    role:m.role,
    content:m.content
   }));
+
   const response=await fetch(API,{
    method:"POST",
    headers:{"Content-Type":"application/json"},
@@ -231,25 +255,30 @@ async function sendMessage(){
     image:image||""
    })
   });
+
   const data=await response.json();
   if(!response.ok||!data.reply){
-   throw new Error(data.error||"Máy chủ không trả về câu trả lời.");
+   throw new Error(data.error||"AI không trả về câu trả lời.");
   }
+
   waiting.textContent=data.reply;
   current.messages.push({role:"assistant",content:data.reply});
   save();
  }catch(error){
   waiting.textContent="⚠️ "+error.message;
  }
+
  sendBtn.disabled=false;
  messagesEl.scrollTop=messagesEl.scrollHeight;
 }
+
 promptEl.addEventListener("keydown",e=>{
  if(e.key==="Enter"&&!e.shiftKey){
   e.preventDefault();
   sendMessage();
  }
 });
+
 renderHistory();
 if(chats.length){
  current=chats[0];
