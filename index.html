@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZEUSGPT AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080812;color:#f5f3ff;font-family:Arial,sans-serif;height:100vh;overflow:hidden}
+.app{display:flex;height:100vh;background:radial-gradient(ellipse at 60% 0%,#44208055,transparent 45%)}
+.sidebar{width:260px;background:#0d0c19;border-right:1px solid #29233f;padding:20px;display:flex;flex-direction:column}
+.brand{font-size:26px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#b18aff,#58d7ff);background-clip:text;color:transparent;margin:8px 0 25px}
+.new{padding:13px;border:1px solid #7046be;border-radius:12px;color:white;background:linear-gradient(110deg,#6932bd,#275fbd);cursor:pointer;font-weight:bold}
+.history{flex:1;overflow:auto;margin-top:20px}
+.history button{display:block;width:100%;padding:11px;text-align:left;background:transparent;border:0;color:#c8c3dc;border-radius:9px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history button:hover{background:#ffffff10}
+.sidebottom{font-size:12px;color:#85819e;border-top:1px solid #29233f;padding-top:15px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{height:65px;border-bottom:1px solid #29233f;display:flex;align-items:center;justify-content:space-between;padding:0 25px}
+.top strong{letter-spacing:1px}
+.status{font-size:12px;color:#80e8b5}
+.content{flex:1;overflow:auto;padding:25px 15px}
+.inner{max-width:850px;margin:auto}
+.welcome{text-align:center;padding:10vh 10px 25px}
+.logo{width:75px;height:75px;border-radius:25px;background:linear-gradient(135deg,#8e43e8,#277ee8);display:grid;place-items:center;margin:auto auto 22px;font-size:39px;box-shadow:0 0 45px #8745e755}
+h1{font-size:clamp(30px,5vw,45px);margin:0}
+.grad{background:linear-gradient(90deg,#c08cff,#5bdcff);background-clip:text;color:transparent}
+.sub{color:#918ba8;font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:650px;margin:30px auto}
+.card{background:#ffffff08;border:1px solid #302744;border-radius:14px;padding:17px;text-align:left;color:#e4dff2;cursor:pointer}
+.card:hover{border-color:#9860ed;background:#9b5cf51a}
+.card small{display:block;color:#9690aa;margin-top:7px}
+.messages{display:flex;flex-direction:column;gap:22px;padding-bottom:30px}
+.msg{display:flex;gap:12px;align-items:flex-start}
+.avatar{width:35px;height:35px;flex:none;border-radius:12px;background:#38235b;display:grid;place-items:center}
+.msg.user .avatar{background:#204b68}
+.bubble{max-width:90%;min-width:0;line-height:1.7;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.user .bubble{background:#19172a;border:1px solid #39304f;border-radius:4px 15px 15px 15px;padding:12px 15px}
+.msg.assistant .bubble{padding:5px 0}
+.actions{display:flex;gap:7px;margin-top:8px}
+.actions button{border:1px solid #39304f;background:#ffffff09;color:#aaa4c2;border-radius:8px;padding:6px 10px;cursor:pointer}
+.composer-wrap{padding:12px 18px 18px}
+.composer{max-width:850px;margin:auto;background:#131222;border:1px solid #45335e;border-radius:18px;padding:12px;box-shadow:0 10px 45px #0007}
+textarea{width:100%;min-height:55px;max-height:150px;resize:vertical;background:transparent;color:white;border:0;outline:0;padding:10px;font-size:14px}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tool{background:#ffffff09;color:#d5cde7;border:1px solid #39304f;border-radius:9px;padding:9px 12px;cursor:pointer}
+.send{margin-left:auto;border:0;background:linear-gradient(110deg,#8c42df,#287ee7);color:white;padding:10px 19px;border-radius:10px;font-weight:bold;cursor:pointer}
+.send:disabled{opacity:.5}
+.hint{text-align:center;font-size:11px;color:#726c87;margin-top:9px}
+#files{display:none}
+.preview{display:flex;gap:8px;flex-wrap:wrap}
+.preview img{width:55px;height:55px;object-fit:cover;border-radius:8px}
+@media(max-width:650px){.sidebar{width:65px;padding:10px 6px;align-items:center}.brand{font-size:0}.brand:first-letter{font-size:22px}.new{font-size:0;padding:12px}.new:after{content:"+";font-size:20px}.history,.sidebottom{display:none}.top{padding:0 13px}.cards{grid-template-columns:1fr}.content{padding:15px 10px}.composer-wrap{padding:8px}.tool{padding:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand">⚡ ZEUSGPT</div>
+<button class="new" onclick="newChat()">＋ Cuộc trò chuyện mới</button>
+<div class="history" id="history"></div>
+<div class="sidebottom">⚡ ZEUSGPT AI<br>Powered by Cloudflare</div>
+</aside>
+<main class="main">
+<header class="top"><strong>⚡ ZEUSGPT AI</strong><span class="status">● ONLINE</span></header>
+<section class="content" id="content">
+<div class="inner">
+<div class="welcome" id="welcome">
+<div class="logo">⚡</div>
+<h1>Welcome to <span class="grad">ZEUSGPT</span></h1>
+<p class="sub">Your intelligent AI assistant.</p>
+<div class="cards">
+<button class="card" onclick="ask('Giải thích cho tôi một kiến thức thú vị')">🧠 Khám phá kiến thức<small>Hỏi đáp và học tập</small></button>
+<button class="card" onclick="ask('Viết cho tôi một website HTML đẹp')">💻 Lập trình<small>Viết code và sửa lỗi</small></button>
+<button class="card" onclick="ask('Hãy giúp tôi lên ý tưởng sáng tạo')">✨ Sáng tạo<small>Ý tưởng mới mỗi ngày</small></button>
+<button class="card" onclick="ask('Giúp tôi giải một bài toán')">📚 Trợ lý học tập<small>Hỗ trợ học tập dễ hiểu</small></button>
+</div>
+</div>
+<div class="messages" id="messages"></div>
+</div>
+</section>
+<div class="composer-wrap">
+<div class="composer">
+<div class="preview" id="preview"></div>
+<textarea id="prompt" placeholder="Nhắn tin với ZEUSGPT..."></textarea>
+<div class="tools">
+<button class="tool" onclick="document.getElementById('files').click()">📎 Tệp</button>
+<input id="files" type="file" accept=".pdf,image/png,image/jpeg,image/webp" multiple>
+<button class="tool" onclick="voice()">🎙️ Giọng nói</button>
+<button class="tool" onclick="readLast()">🔊 Đọc</button>
+<button class="tool" onclick="newChat()">⌫ Làm mới</button>
+<button class="send" id="send" onclick="send()">Gửi ➤</button>
+</div>
+</div>
+<div class="hint">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
+</div>
+</main>
+</div>
+<script>
+const API="https://khanggpt.itzkenmcxd.workers.dev";
+const $=id=>document.getElementById(id);
+let messages=[],chats=[],files=[],lastReply="",busy=false,currentId=Date.now();
+try{chats=JSON.parse(localStorage.getItem("zeus_chats")||"[]")}catch(e){}
+function welcome(v){$("welcome").style.display=v?"block":"none"}
+function save(){
+if(!messages.length)return;
+chats=chats.filter(c=>c.id!==currentId);
+chats.push({id:currentId,title:(messages.find(m=>m.role==="user")?.content||"Cuộc trò chuyện").slice(0,35),messages});
+try{localStorage.setItem("zeus_chats",JSON.stringify(chats))}catch(e){}
+historyRender();
+}
+function historyRender(){
+$("history").innerHTML="";
+chats.slice().reverse().forEach(c=>{
+let b=document.createElement("button");b.textContent=c.title;b.onclick=()=>{
+messages=c.messages.slice();currentId=c.id;$("messages").innerHTML="";
+messages.forEach(m=>add(m.role,m.content));welcome(!messages.length);
+};$("history").appendChild(b);
+});
+}
+function newChat(){save();messages=[];files=[];currentId=Date.now();$("messages").innerHTML="";$("prompt").value="";$("preview").innerHTML="";welcome(true)}
+function add(role,text){
+welcome(false);
+let row=document.createElement("div");row.className="msg "+role;
+let av=document.createElement("div");av.className="avatar";av.textContent=role==="user"?"B":"⚡";
+let bubble=document.createElement("div");bubble.className="bubble";
+let content=document.createElement("div");content.textContent=text;bubble.appendChild(content);
+if(role==="assistant"){
+let actions=document.createElement("div");actions.className="actions";
+let cp=document.createElement("button");cp.textContent="Sao chép";cp.onclick=()=>navigator.clipboard?.writeText(text);
+let rd=document.createElement("button");rd.textContent="Đọc";rd.onclick=()=>speak(text);
+actions.append(cp,rd);bubble.appendChild(actions);
+}
+row.append(av,bubble);$("messages").appendChild(row);$("content").scrollTop=$("content").scrollHeight;return content;
+}
+async function send(){
+if(busy)return;
+let text=$("prompt").value.trim();if(!text&&!files.length)return;
+busy=true;$("send").disabled=true;$("prompt").value="";
+let selected=files.slice();files=[];$("preview").innerHTML="";
+let pdfs=selected.filter(f=>f.text).map(f=>"Nội dung PDF "+f.name+":\n"+f.text).join("\n");
+let full=[text,pdfs].filter(Boolean).join("\n\n");
+add("user",full||"Tệp đính kèm");
+messages.push({role:"user",content:full});
+let waiting=add("assistant","ZEUSGPT đang suy nghĩ...");
+try{
+let res=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:messages.slice(-12)})});
+let data=await res.json();
+if(!res.ok)throw Error(data.details||data.error||"HTTP "+res.status);
+let reply=data.reply||data.response;
+if(!reply)throw Error("AI không trả về câu trả lời");
+waiting.textContent=reply;lastReply=reply;
+messages.push({role:"assistant",content:reply});save();
+}catch(e){waiting.textContent="⚠️ Lỗi kết nối: "+e.message+"\nHãy kiểm tra Cloudflare Worker và AI binding."}
+finally{busy=false;$("send").disabled=false}
+}
+$("files").onchange=async e=>{
+for(let f of e.target.files){
+try{
+if(f.type==="application/pdf"){
+if(f.size>8*1024*1024)throw Error("PDF tối đa 8 MB");
+let lib=await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.mjs");
+let pdf=await lib.getDocument({data:await f.arrayBuffer()}).promise;
+if(pdf.numPages>20)throw Error("PDF tối đa 20 trang");
+let t="";
+for(let i=1;i<=pdf.numPages;i++){let p=await pdf.getPage(i);let c=await p.getTextContent();t+=c.items.map(x=>x.str).join(" ")+"\n"}
+if(!t.trim())throw Error("PDF scan chưa hỗ trợ OCR");
+files.push({name:f.name,text:t.slice(0,25000)});
+}else if(f.type.startsWith("image/")){
+if(f.size>5*1024*1024)throw Error("Ảnh tối đa 5 MB");
+let url=await new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});
+files.push({name:f.name,data:url});
+let im=document.createElement("img");im.src=url;$("preview").appendChild(im);
+}else throw Error("Định dạng không hỗ trợ");
+}catch(err){alert(err.message)}
+}
+e.target.value="";
+};
+function ask(t){$("prompt").value=t;send()}
+$("prompt").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}};
+function speak(t){if(!("speechSynthesis"in window))return alert("Trình duyệt không hỗ trợ");speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="vi-VN";speechSynthesis.speak(u)}
+function readLast(){lastReply?speak(lastReply):alert("Chưa có câu trả lời")}
+function voice(){
+let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR)return alert("Hãy dùng Chrome để nhận giọng nói");
+let r=new SR();r.lang="vi-VN";r.onresult=e=>$("prompt").value+=e.results[0][0].transcript;r.start();
+}
+historyRender();
+</script>
+</body>
+</html>
