@@ -4,349 +4,859 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZEUSGPT ULTRA</title>
+<meta name="theme-color" content="#090914">
+<title>ZEUSGPT Ultra</title>
+
 <style>
-*{box-sizing:border-box}
-:root{--bg:#080b16;--panel:#101629;--line:#26314d;--text:#f3f5ff;--muted:#929bb5;--purple:#8058ff;--blue:#328cff}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;height:100vh;overflow:hidden}
-button,textarea{font:inherit}
-.app{display:flex;height:100vh}
-.sidebar{width:270px;background:#0c1120;border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:14px}
-.logo{font-size:23px;font-weight:900;background:linear-gradient(90deg,#a58aff,#48b8ff);background-clip:text;color:transparent}
-.new{background:linear-gradient(100deg,var(--purple),var(--blue));border:0;color:white;padding:13px;border-radius:12px;cursor:pointer;font-weight:bold}
-.side-title{font-size:12px;color:var(--muted);margin-top:12px}
-.history{overflow:auto;flex:1}
-.chat-item{padding:12px;border-radius:10px;color:#c9d1e8;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
-.chat-item.active,.chat-item:hover{background:#1a2440}
-.side-bottom{font-size:12px;color:var(--muted);line-height:1.6}
-.main{flex:1;display:flex;flex-direction:column;min-width:0}
-.top{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
-.status{font-size:12px;color:#6ce3ae}
-.messages{flex:1;overflow-y:auto;padding:25px max(18px,calc((100% - 850px)/2))}
-.welcome{text-align:center;margin:12vh auto 30px;max-width:600px}
-.symbol{font-size:55px}
-.welcome h1{font-size:35px;margin:15px 0 8px;background:linear-gradient(90deg,#a58aff,#48b8ff);background-clip:text;color:transparent}
-.welcome p{color:var(--muted);line-height:1.6}
-.suggestions{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:25px}
-.suggestions button{background:#131c32;border:1px solid var(--line);color:#dce3ff;padding:10px 13px;border-radius:12px;cursor:pointer}
-.message{display:flex;gap:12px;margin:22px 0;align-items:flex-start}
-.avatar{width:35px;height:35px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;background:#25204a}
-.message.user .avatar{background:#17345b}
-.bubble{max-width:100%;min-width:0;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
-.message.user .bubble{background:#151f36;border:1px solid #293a5c;padding:12px 15px;border-radius:14px}
-.message img{display:block;max-width:min(320px,100%);max-height:260px;object-fit:contain;border-radius:12px;margin-bottom:10px}
-.copy{background:none;border:0;color:var(--muted);cursor:pointer;font-size:12px;margin-top:8px}
-.composer-area{padding:12px 18px 18px}
-.composer{max-width:850px;margin:auto;background:#111a2d;border:1px solid #34415f;border-radius:18px;padding:12px}
-.preview{display:none;padding:4px 5px 12px}
-.preview img{width:85px;height:85px;object-fit:cover;border-radius:10px}
-.remove{border:0;background:#452337;color:white;border-radius:8px;padding:6px 10px;cursor:pointer;margin-left:8px}
-textarea{width:100%;resize:none;max-height:150px;min-height:48px;background:transparent;border:0;outline:0;color:white;padding:10px}
-.tools{display:flex;align-items:center;gap:9px}
-.tool{border:1px solid var(--line);background:#18233b;color:#dce5ff;border-radius:10px;padding:10px 12px;cursor:pointer}
-.send{margin-left:auto;background:linear-gradient(100deg,var(--purple),var(--blue));border:0;color:white;padding:11px 17px;border-radius:11px;cursor:pointer;font-weight:bold}
-.send:disabled{opacity:.5;cursor:not-allowed}
-.note{text-align:center;color:#78839e;font-size:11px;margin-top:10px}
-.menu{display:none;background:none;border:0;color:white;font-size:22px}
-@media(max-width:700px){
-.sidebar{position:fixed;z-index:5;left:-280px;top:0;bottom:0;transition:.2s}
-.sidebar.open{left:0}
-.menu{display:block}
-.messages{padding:18px 14px}
-.welcome{margin-top:10vh}
-.welcome h1{font-size:29px}
-.top{padding:0 14px}
+:root {
+  --bg: #090914;
+  --panel: #101020;
+  --panel2: #17172b;
+  --text: #f5f3ff;
+  --muted: #9998b5;
+  --purple: #9065ff;
+  --blue: #477dff;
+  --border: rgba(255,255,255,.09);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 15% 0%, #30205b55, transparent 40%),
+    radial-gradient(ellipse at 90% 90%, #153a7350, transparent 40%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+button, textarea {
+  font: inherit;
+}
+
+.app {
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 270px;
+  background: rgba(12,12,27,.92);
+  border-right: 1px solid var(--border);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg,var(--purple),var(--blue));
+  font-size: 23px;
+  font-weight: 900;
+  box-shadow: 0 5px 25px #7655ff55;
+}
+
+.brand h2 {
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.brand small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.new-chat {
+  border: 1px solid #8765ff66;
+  background: linear-gradient(110deg,#7046df,#356de8);
+  color: white;
+  padding: 13px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+.section-label {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  margin: 5px 0 12px;
+}
+
+.history {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.history-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #c9c6df;
+  text-align: left;
+  padding: 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.history-item:hover,
+.history-item.active {
+  background: #24213d;
+  border-color: var(--border);
+  color: white;
+}
+
+.history-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  font-size: 13px;
+}
+
+.delete-chat {
+  border: 0;
+  color: #a6a2bd;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.sidebar-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 66px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  background: #0c0c19a8;
+  backdrop-filter: blur(15px);
+}
+
+.top-title {
+  font-weight: 700;
+  letter-spacing: .4px;
+}
+
+.status {
+  font-size: 12px;
+  color: #80e5b3;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  background: #55e69b;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #55e69b;
+}
+
+.menu-btn {
+  display: none;
+  border: 0;
+  color: white;
+  background: transparent;
+  font-size: 22px;
+}
+
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 18px;
+  scroll-behavior: smooth;
+}
+
+.chat-content {
+  max-width: 850px;
+  margin: auto;
+}
+
+.welcome {
+  text-align: center;
+  padding: 10vh 10px 25px;
+}
+
+.welcome-logo {
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 20px;
+  display: grid;
+  place-items: center;
+  font-size: 36px;
+  border-radius: 24px;
+  background: linear-gradient(135deg,var(--purple),var(--blue));
+  box-shadow: 0 10px 45px #795bff55;
+}
+
+.welcome h1 {
+  font-size: clamp(28px,5vw,43px);
+  margin: 0 0 12px;
+  background: linear-gradient(90deg,#c5aaff,#6ba5ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.welcome p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 10px;
+  max-width: 650px;
+  margin: 30px auto;
+}
+
+.suggestion {
+  background: #17172b;
+  border: 1px solid var(--border);
+  color: #d8d5ed;
+  border-radius: 13px;
+  padding: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.suggestion:hover {
+  border-color: #8867ff;
+  transform: translateY(-2px);
+}
+
+.message {
+  display: flex;
+  gap: 12px;
+  margin: 22px 0;
+  animation: appear .2s ease;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(135deg,#8054e8,#3978e9);
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.message.user .avatar {
+  background: #292943;
+}
+
+.message-body {
+  min-width: 0;
+  flex: 1;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.message-role {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.message-text {
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+.copy-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 5px 9px;
+  border-radius: 7px;
+  font-size: 11px;
+  cursor: pointer;
+  margin-top: 9px;
+}
+
+.typing {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.composer-wrap {
+  padding: 14px 18px 20px;
+  background: linear-gradient(transparent,#090914 25%);
+}
+
+.composer {
+  max-width: 850px;
+  margin: auto;
+  background: #17172b;
+  border: 1px solid #393454;
+  border-radius: 17px;
+  padding: 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  box-shadow: 0 10px 40px #0004;
+}
+
+.composer:focus-within {
+  border-color: #8b6aff;
+  box-shadow: 0 0 0 3px #8965ff18;
+}
+
+#prompt {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  border: 0;
+  outline: 0;
+  color: white;
+  background: transparent;
+  padding: 8px 5px;
+  max-height: 150px;
+  min-height: 28px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+#prompt::placeholder {
+  color: #85829e;
+}
+
+.send-btn {
+  width: 43px;
+  height: 43px;
+  border: 0;
+  border-radius: 12px;
+  color: white;
+  background: linear-gradient(135deg,var(--purple),var(--blue));
+  cursor: pointer;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.send-btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.disclaimer {
+  text-align: center;
+  color: #77748f;
+  font-size: 10px;
+  margin-top: 10px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #292744;
+  border: 1px solid var(--border);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  display: none;
+  z-index: 5;
+}
+
+@media(max-width:700px) {
+  .sidebar {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    left: -290px;
+    transition: .25s;
+    box-shadow: 15px 0 50px #0008;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .topbar {
+    padding: 0 15px;
+    gap: 10px;
+  }
+
+  .chat-area {
+    padding: 18px 12px;
+  }
+
+  .welcome {
+    padding-top: 8vh;
+  }
+
+  .suggestions {
+    grid-template-columns: 1fr;
+  }
+
+  .composer-wrap {
+    padding: 10px 10px 15px;
+  }
 }
 </style>
 </head>
+
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar">
-<div class="logo">⚡ ZEUSGPT</div>
-<button class="new" onclick="newChat()">＋ Cuộc trò chuyện mới</button>
-<div class="side-title">LỊCH SỬ TRÒ CHUYỆN</div>
-<div class="history" id="history"></div>
-<div class="side-bottom">ZEUSGPT ULTRA<br>AI Assistant • Shared Worker</div>
-</aside>
 
-<main class="main">
-<header class="top">
-<div style="display:flex;align-items:center;gap:12px">
-<button class="menu" onclick="toggleMenu()">☰</button>
-<strong>ZEUSGPT <span style="color:#9b82ff">ULTRA</span></strong>
-</div>
-<span class="status">● AI Assistant</span>
-</header>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">Z</div>
+      <div>
+        <h2>ZEUSGPT</h2>
+        <small>ULTRA AI ASSISTANT</small>
+      </div>
+    </div>
 
-<section class="messages" id="messages">
-<div class="welcome">
-<div class="symbol">⚡</div>
-<h1>ZEUSGPT ULTRA</h1>
-<p>Xin chào! Tôi có thể giúp bạn học tập, viết code, giải đáp câu hỏi và phân tích hình ảnh.</p>
-<div class="suggestions">
-<button onclick="quick('Giới thiệu về bạn đi')">Giới thiệu bản thân</button>
-<button onclick="quick('Giúp tôi học tập')">Học tập</button>
-<button onclick="quick('Viết cho tôi một trang web HTML')">Viết code</button>
-</div>
-</div>
-</section>
+    <button class="new-chat" id="newChat">＋ Cuộc trò chuyện mới</button>
 
-<footer class="composer-area">
-<div class="composer">
-<div class="preview" id="preview">
-<img id="previewImg" alt="Ảnh xem trước">
-<button class="remove" onclick="removeImage()">Xóa ảnh</button>
+    <div class="section-label">Lịch sử trò chuyện</div>
+    <div class="history" id="history"></div>
+
+    <div class="sidebar-bottom">
+      <div>✦ ZEUSGPT Ultra</div>
+      <div style="margin-top:6px">Powered by Cloudflare AI</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div class="top-title">ZEUSGPT <span style="color:#9d80ff">ULTRA</span></div>
+      </div>
+      <div class="status"><span class="dot"></span> AI Assistant</div>
+    </header>
+
+    <section class="chat-area" id="chatArea">
+      <div class="chat-content" id="chatContent"></div>
+    </section>
+
+    <div class="composer-wrap">
+      <form class="composer" id="chatForm">
+        <textarea id="prompt" rows="1"
+          placeholder="Nhắn tin cho ZEUSGPT..."
+          autocomplete="off"></textarea>
+        <button class="send-btn" id="sendBtn" type="submit">➤</button>
+      </form>
+      <div class="disclaimer">
+        ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.
+      </div>
+    </div>
+  </main>
 </div>
-<textarea id="prompt" placeholder="Nhắn tin cho ZEUSGPT..." rows="1"></textarea>
-<div class="tools">
-<button class="tool" onclick="document.getElementById('file').click()">＋ Ảnh</button>
-<input id="file" type="file" accept="image/*" hidden onchange="chooseImage(event)">
-<button class="tool" onclick="clearInput()">Xóa</button>
-<button class="send" id="send" onclick="sendMessage()">Gửi ➤</button>
-</div>
-</div>
-<div class="note">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div>
-</footer>
-</main>
-</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-const API_URL="https://khanggpt.itzkenmcxd.workers.dev";
-const APP_NAME="ZEUSGPT";
+const API_URL = "https://khanggpt.itzkenmcxd.workers.dev";
+const APP_NAME = "ZEUSGPT";
+const STORAGE_KEY = "zeusgpt_chats_v2";
 
-let chats=[];
-let currentChat=null;
-let selectedImage=null;
-let busy=false;
+const chatContent = document.getElementById("chatContent");
+const chatArea = document.getElementById("chatArea");
+const promptInput = document.getElementById("prompt");
+const sendBtn = document.getElementById("sendBtn");
+const historyBox = document.getElementById("history");
+const sidebar = document.getElementById("sidebar");
 
-const messagesEl=document.getElementById("messages");
-const promptEl=document.getElementById("prompt");
+let chats = [];
+let activeChatId = null;
+let busy = false;
 
-function createChat(){
- return {id:Date.now()+Math.random(),title:"Cuộc trò chuyện mới",messages:[]};
+function makeId() {
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2, 8);
 }
 
-function newChat(){
- currentChat=createChat();
- chats.unshift(currentChat);
- selectedImage=null;
- updatePreview();
- promptEl.value="";
- render();
- promptEl.focus();
- document.getElementById("sidebar").classList.remove("open");
+function saveChats() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+  } catch (error) {
+    showToast("Không thể lưu lịch sử trên trình duyệt.");
+  }
 }
 
-function selectChat(id){
- currentChat=chats.find(c=>c.id===id);
- render();
- document.getElementById("sidebar").classList.remove("open");
-}
-
-function renderHistory(){
- const el=document.getElementById("history");
- el.innerHTML="";
- chats.forEach(chat=>{
-  const item=document.createElement("div");
-  item.className="chat-item"+(currentChat&&currentChat.id===chat.id?" active":"");
-  item.textContent=chat.title;
-  item.onclick=()=>selectChat(chat.id);
-  el.appendChild(item);
- });
-}
-
-function render(){
- renderHistory();
- messagesEl.innerHTML="";
- if(!currentChat||currentChat.messages.length===0){
-  messagesEl.innerHTML=`
-   <div class="welcome">
-    <div class="symbol">⚡</div>
-    <h1>ZEUSGPT ULTRA</h1>
-    <p>Xin chào! Tôi có thể giúp bạn học tập, viết code, giải đáp câu hỏi và phân tích hình ảnh.</p>
-    <div class="suggestions">
-     <button onclick="quick('Giới thiệu về bạn đi')">Giới thiệu bản thân</button>
-     <button onclick="quick('Giúp tôi học tập')">Học tập</button>
-     <button onclick="quick('Viết cho tôi một trang web HTML')">Viết code</button>
-    </div>
-   </div>`;
-  return;
- }
- currentChat.messages.forEach(m=>addMessage(m.role,m.content,m.image,false));
- messagesEl.scrollTop=messagesEl.scrollHeight;
-}
-
-function addMessage(role,content,image=null,scroll=true){
- const row=document.createElement("div");
- row.className="message "+role;
- const avatar=document.createElement("div");
- avatar.className="avatar";
- avatar.textContent=role==="user"?"👤":"⚡";
- const body=document.createElement("div");
- body.style.minWidth="0";
- body.style.flex="1";
- const bubble=document.createElement("div");
- bubble.className="bubble";
- if(image){
-  const img=document.createElement("img");
-  img.src=image;
-  img.alt="Ảnh đính kèm";
-  bubble.appendChild(img);
- }
- const text=document.createElement("div");
- text.textContent=content;
- bubble.appendChild(text);
- body.appendChild(bubble);
- if(role==="assistant"&&content){
-  const copy=document.createElement("button");
-  copy.className="copy";
-  copy.textContent="Sao chép";
-  copy.onclick=()=>navigator.clipboard.writeText(content).then(()=>copy.textContent="Đã sao chép");
-  body.appendChild(copy);
- }
- row.append(avatar,body);
- messagesEl.appendChild(row);
- if(scroll)messagesEl.scrollTop=messagesEl.scrollHeight;
- return row;
-}
-
-function chooseImage(event){
- const file=event.target.files[0];
- if(!file)return;
- if(!file.type.startsWith("image/")){
-  alert("Vui lòng chọn ảnh.");
-  return;
- }
- const reader=new FileReader();
- reader.onload=()=>{
-  const img=new Image();
-  img.onload=()=>{
-   const canvas=document.createElement("canvas");
-   const maxSide=768;
-   const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
-   canvas.width=Math.round(img.width*scale);
-   canvas.height=Math.round(img.height*scale);
-   canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
-   selectedImage=canvas.toDataURL("image/jpeg",0.65);
-   updatePreview();
-  };
-  img.onerror=()=>alert("Không thể đọc ảnh này.");
-  img.src=reader.result;
- };
- reader.onerror=()=>alert("Không đọc được file ảnh.");
- reader.readAsDataURL(file);
-}
-
-function updatePreview(){
- const box=document.getElementById("preview");
- if(selectedImage){
-  box.style.display="block";
-  document.getElementById("previewImg").src=selectedImage;
- }else{
-  box.style.display="none";
-  document.getElementById("previewImg").removeAttribute("src");
- }
-}
-
-function removeImage(){
- selectedImage=null;
- document.getElementById("file").value="";
- updatePreview();
-}
-
-function clearInput(){
- promptEl.value="";
- removeImage();
-}
-
-function quick(text){
- promptEl.value=text;
- sendMessage();
-}
-
-async function sendMessage(){
- const text=promptEl.value.trim();
- if(busy)return;
- if(!text&&!selectedImage){promptEl.focus();return;}
-
- if(!currentChat){
-  currentChat=createChat();
-  chats.unshift(currentChat);
- }
-
- const image=selectedImage;
- const content=text||(image?"Hãy phân tích hình ảnh này.":"");
- currentChat.messages.push({role:"user",content,image});
- if(currentChat.title==="Cuộc trò chuyện mới"){
-  currentChat.title=content.slice(0,32)||"Phân tích hình ảnh";
- }
-
- promptEl.value="";
- removeImage();
- render();
-
- busy=true;
- document.getElementById("send").disabled=true;
- const loading=addMessage("assistant","Đang suy nghĩ...");
-
- try{
-  const history=currentChat.messages.slice(-12).map(m=>({
-   role:m.role,
-   content:m.content
-  }));
-
-  const response=await fetch(API_URL,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-    app:APP_NAME,
-    messages:history,
-    ...(image?{image}: {})
-   })
-  });
-
-  let data;
-  try{data=await response.json();}
-  catch{throw new Error("Worker không trả về JSON hợp lệ.");}
-
-  if(!response.ok||!data.reply){
-   throw new Error(
-    (data.error||"AI không trả lời.")+
-    (data.details?"\nChi tiết: "+data.details:"")
-   );
+function loadChats() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (Array.isArray(saved)) chats = saved;
+  } catch (error) {
+    chats = [];
   }
 
-  loading.querySelector(".bubble").textContent=data.reply;
-  const copy=document.createElement("button");
-  copy.className="copy";
-  copy.textContent="Sao chép";
-  copy.onclick=()=>navigator.clipboard.writeText(data.reply).then(()=>copy.textContent="Đã sao chép");
-  loading.querySelector("div:nth-child(2)").appendChild(copy);
+  if (chats.length) {
+    activeChatId = chats[0].id;
+  } else {
+    createChat();
+  }
 
-  currentChat.messages.push({role:"assistant",content:data.reply});
+  renderAll();
+}
 
- }catch(error){
-  const message="⚠️ "+(error.message||"Không thể kết nối AI.");
-  loading.querySelector(".bubble").textContent=message;
-  currentChat.messages.push({role:"assistant",content:message});
- }finally{
-  busy=false;
-  document.getElementById("send").disabled=false;
+function activeChat() {
+  return chats.find(chat => chat.id === activeChatId);
+}
+
+function createChat() {
+  const chat = {
+    id: makeId(),
+    title: "Cuộc trò chuyện mới",
+    messages: [],
+    updated: Date.now()
+  };
+
+  chats.unshift(chat);
+  activeChatId = chat.id;
+  saveChats();
+  renderAll();
+  promptInput.focus();
+}
+
+function deleteChat(id) {
+  chats = chats.filter(chat => chat.id !== id);
+
+  if (activeChatId === id) {
+    activeChatId = chats[0]?.id || null;
+    if (!activeChatId) createChat();
+  }
+
+  saveChats();
+  renderAll();
+}
+
+function switchChat(id) {
+  activeChatId = id;
+  renderAll();
+  sidebar.classList.remove("open");
+}
+
+function renderHistory() {
+  historyBox.innerHTML = "";
+
+  chats.sort((a,b) => b.updated - a.updated);
+
+  chats.forEach(chat => {
+    const row = document.createElement("div");
+    row.className = "history-item" +
+      (chat.id === activeChatId ? " active" : "");
+
+    const title = document.createElement("span");
+    title.className = "history-name";
+    title.textContent = "▤  " + chat.title;
+
+    const del = document.createElement("button");
+    del.className = "delete-chat";
+    del.textContent = "×";
+    del.title = "Xóa cuộc trò chuyện";
+
+    del.addEventListener("click", event => {
+      event.stopPropagation();
+      deleteChat(chat.id);
+    });
+
+    row.append(title, del);
+    row.addEventListener("click", () => switchChat(chat.id));
+    historyBox.appendChild(row);
+  });
+}
+
+function showWelcome() {
+  chatContent.innerHTML = `
+    <div class="welcome">
+      <div class="welcome-logo">Z</div>
+      <h1>Xin chào! Tôi là ZEUSGPT</h1>
+      <p>Trợ lý AI của bạn. Hôm nay tôi có thể giúp gì?</p>
+
+      <div class="suggestions">
+        <button class="suggestion" data-prompt="Giải thích cho tôi một kiến thức thú vị.">
+          💡 Kiến thức thú vị
+        </button>
+        <button class="suggestion" data-prompt="Giúp tôi viết một đoạn văn hay.">
+          ✍️ Viết nội dung
+        </button>
+        <button class="suggestion" data-prompt="Hãy giúp tôi viết code HTML.">
+          💻 Lập trình
+        </button>
+        <button class="suggestion" data-prompt="Hãy kể cho tôi một câu chuyện vui.">
+          ✨ Giải trí
+        </button>
+      </div>
+    </div>
+  `;
+
+  chatContent.querySelectorAll(".suggestion").forEach(button => {
+    button.addEventListener("click", () => {
+      promptInput.value = button.dataset.prompt;
+      sendMessage();
+    });
+  });
+}
+
+function addMessageElement(message, index) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "message " + message.role;
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = message.role === "user" ? "U" : "Z";
+
+  const body = document.createElement("div");
+  body.className = "message-body";
+
+  const role = document.createElement("div");
+  role.className = "message-role";
+  role.textContent = message.role === "user" ? "Bạn" : "ZEUSGPT";
+
+  const text = document.createElement("div");
+  text.className = "message-text";
+  text.textContent = message.content;
+
+  body.append(role, text);
+
+  if (message.role === "assistant") {
+    const copy = document.createElement("button");
+    copy.className = "copy-btn";
+    copy.textContent = "Sao chép";
+
+    copy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(message.content);
+        showToast("Đã sao chép câu trả lời.");
+      } catch (error) {
+        showToast("Không thể sao chép trên trình duyệt này.");
+      }
+    });
+
+    body.appendChild(copy);
+  }
+
+  wrapper.append(avatar, body);
+  chatContent.appendChild(wrapper);
+}
+
+function renderChat() {
+  const chat = activeChat();
+  chatContent.innerHTML = "";
+
+  if (!chat || chat.messages.length === 0) {
+    showWelcome();
+    return;
+  }
+
+  chat.messages.forEach((message, index) => {
+    addMessageElement(message, index);
+  });
+
+  scrollBottom();
+}
+
+function renderAll() {
   renderHistory();
-  messagesEl.scrollTop=messagesEl.scrollHeight;
- }
+  renderChat();
 }
 
-function toggleMenu(){
- document.getElementById("sidebar").classList.toggle("open");
+function scrollBottom() {
+  requestAnimationFrame(() => {
+    chatArea.scrollTop = chatArea.scrollHeight;
+  });
 }
 
-promptEl.addEventListener("keydown",e=>{
- if(e.key==="Enter"&&!e.shiftKey){
-  e.preventDefault();
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => {
+    toast.style.display = "none";
+  }, 2400);
+}
+
+function setBusy(value) {
+  busy = value;
+  sendBtn.disabled = value;
+  sendBtn.textContent = value ? "…" : "➤";
+}
+
+async function sendMessage() {
+  const text = promptInput.value.trim();
+
+  if (!text || busy) return;
+
+  let chat = activeChat();
+
+  if (!chat) {
+    createChat();
+    chat = activeChat();
+  }
+
+  chat.messages.push({
+    role: "user",
+    content: text
+  });
+
+  if (chat.messages.length === 1) {
+    chat.title = text.length > 32
+      ? text.slice(0, 32) + "..."
+      : text;
+  }
+
+  chat.updated = Date.now();
+  promptInput.value = "";
+  promptInput.style.height = "auto";
+
+  saveChats();
+  renderAll();
+  setBusy(true);
+
+  const typing = document.createElement("div");
+  typing.className = "typing";
+  typing.textContent = "ZEUSGPT đang suy nghĩ...";
+  chatContent.appendChild(typing);
+  scrollBottom();
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        app: APP_NAME,
+        messages: chat.messages.slice(-16)
+      })
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (error) {
+      throw new Error("Worker trả về dữ liệu không hợp lệ.");
+    }
+
+    if (!response.ok || data.error) {
+      throw new Error(data.details || data.error || "Không thể kết nối AI.");
+    }
+
+    const answer = data.reply || data.response || data.text;
+
+    if (!answer || typeof answer !== "string") {
+      throw new Error("AI chưa trả về nội dung văn bản.");
+    }
+
+    chat.messages.push({
+      role: "assistant",
+      content: answer
+    });
+
+    chat.updated = Date.now();
+    saveChats();
+
+  } catch (error) {
+    chat.messages.push({
+      role: "assistant",
+      content:
+        "⚠️ Không thể nhận câu trả lời.\nChi tiết: " +
+        (error.message || "Lỗi không xác định")
+    });
+
+    saveChats();
+
+  } finally {
+    setBusy(false);
+    renderAll();
+    scrollBottom();
+  }
+}
+
+document.getElementById("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
   sendMessage();
- }
 });
+
+document.getElementById("newChat").addEventListener("click", () => {
+  createChat();
+  sidebar.classList.remove("open");
+});
+
+document.getElementById("menuBtn").addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+});
+
+promptInput.addEventListener("input", () => {
+  promptInput.style.height = "auto";
+  promptInput.style.height =
+    Math.min(promptInput.scrollHeight, 150) + "px";
+});
+
+promptInput.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+loadChats();
 </script>
 </body>
 </html>
