@@ -1,80 +1,115 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#100b24">
 <title>ZEUSGPT</title>
 <style>
-:root{--bg:#0b0718;--panel:rgba(25,18,48,.78);--panel2:rgba(38,27,70,.72);--line:rgba(190,160,255,.16);--text:#f6f1ff;--muted:#b9acd2;--purple:#a78bfa;--pink:#e879f9;--blue:#7dd3fc;--user:linear-gradient(135deg,#7146d9,#a855f7)}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 15%,#382064 0,transparent 32%),radial-gradient(circle at 85% 75%,#192e5d 0,transparent 30%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
-body:before,body:after{content:"";position:fixed;width:360px;height:360px;border-radius:50%;filter:blur(90px);opacity:.22;pointer-events:none;animation:float 14s ease-in-out infinite alternate;background:#9333ea;z-index:-1}body:before{top:-140px;left:18%}body:after{right:-130px;bottom:-160px;background:#2563eb;animation-delay:-5s}@keyframes float{to{transform:translate(80px,70px) scale(1.2)}}
-button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}.app{height:100dvh;display:grid;grid-template-columns:280px 1fr;gap:14px;padding:14px;max-width:1600px;margin:auto}.sidebar,.main{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(22px);border-radius:22px;min-height:0;box-shadow:0 18px 60px #0005}.sidebar{display:flex;flex-direction:column;padding:16px;gap:14px}.brand{display:flex;align-items:center;gap:11px;padding:5px 3px 13px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#8b5cf6,#d946ef);display:grid;place-items:center;font-size:22px;box-shadow:0 7px 25px #9333ea66}.brand strong{font-size:19px;letter-spacing:1.3px}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:2px}.newchat{border:0;background:linear-gradient(110deg,#7c3aed,#a855f7);padding:13px;border-radius:13px;font-weight:700;box-shadow:0 8px 22px #7c3aed44}.side-label{font-size:11px;color:var(--muted);letter-spacing:1.4px;margin:8px 4px 0}.history{overflow:auto;display:flex;flex-direction:column;gap:6px;flex:1}.history-item{border:1px solid transparent;background:transparent;text-align:left;padding:11px;border-radius:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.history-item:hover,.history-item.active{background:var(--panel2);border-color:var(--line);color:var(--text)}.side-bottom{border-top:1px solid var(--line);padding-top:12px;display:flex;gap:8px}.softbtn{border:1px solid var(--line);background:#ffffff09;border-radius:11px;padding:10px 12px;color:var(--muted)}.softbtn:hover{background:#ffffff16;color:white}.main{display:flex;flex-direction:column;overflow:hidden}.topbar{height:66px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line)}.top-title{font-weight:700}.status{font-size:12px;color:#86efac;display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;background:#4ade80;border-radius:50%;box-shadow:0 0 12px #4ade80}.top-actions{display:flex;gap:8px}.chat{flex:1;overflow:auto;padding:26px max(18px,calc((100% - 850px)/2));scroll-behavior:smooth}.welcome{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px}.welcome-logo{width:76px;height:76px;border-radius:25px;display:grid;place-items:center;font-size:36px;background:linear-gradient(135deg,#7c3aed,#d946ef);box-shadow:0 12px 45px #9333ea66;margin-bottom:22px}.welcome h1{font-size:clamp(28px,5vw,42px);margin:0 0 10px;background:linear-gradient(90deg,#fff,#c4b5fd,#f0abfc);background-clip:text;color:transparent}.welcome p{color:var(--muted);max-width:490px;line-height:1.6;margin:0 0 25px}.suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:min(100%,600px)}.suggestion{padding:14px;text-align:left;border:1px solid var(--line);background:#ffffff08;border-radius:14px;color:#e9ddff}.suggestion:hover{background:#a78bfa20;border-color:#a78bfa66}.message{display:flex;gap:12px;margin:0 auto 22px;max-width:850px;align-items:flex-start}.avatar{width:34px;height:34px;flex-shrink:0;border-radius:12px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line)}.message.user .avatar{background:var(--user)}.bubble{max-width:min(100%,740px);line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px 16px;border-radius:4px 16px 16px 16px;background:#ffffff0b;border:1px solid var(--line)}.message.user{flex-direction:row-reverse}.message.user .bubble{background:var(--user);border:0;border-radius:16px 4px 16px 16px}.bubble pre{white-space:pre-wrap;overflow:auto;background:#080612;padding:12px;border-radius:10px}.bubble code{font-family:ui-monospace,monospace}.message-tools{display:flex;gap:6px;margin-top:7px}.mini{font-size:11px;border:0;background:transparent;color:var(--muted);padding:4px 7px}.mini:hover{color:white}.typing{display:flex;gap:5px;padding:7px}.typing i{width:6px;height:6px;background:#c4b5fd;border-radius:50%;animation:blink 1s infinite alternate}.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}@keyframes blink{to{opacity:.25;transform:translateY(-4px)}}.composer-wrap{padding:14px 18px 18px;border-top:1px solid var(--line)}.composer{max-width:900px;margin:auto;border:1px solid #b99aff55;background:#100b20cc;border-radius:18px;padding:10px;box-shadow:0 10px 35px #0004}.composer textarea{width:100%;resize:none;max-height:160px;min-height:48px;background:transparent;border:0;outline:0;color:var(--text);padding:8px 10px;line-height:1.5}.composer textarea::placeholder{color:#9285aa}.compose-row{display:flex;justify-content:space-between;align-items:center;padding:2px 4px}.compose-hint{font-size:11px;color:#8f82a7}.compose-actions{display:flex;gap:7px}.iconbtn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#ffffff0b;color:#ddd0f5}.iconbtn:hover{background:#ffffff18}.iconbtn.active{background:#7c3aed;color:white}.send{width:40px;height:38px;border:0;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#c026d3);font-size:17px}.send:disabled{opacity:.45;cursor:not-allowed}.notice{text-align:center;color:#887b9f;font-size:10px;margin-top:8px}.modal-back{position:fixed;inset:0;background:#05030bcc;display:none;place-items:center;padding:18px;z-index:5}.modal-back.show{display:grid}.modal{width:min(100%,430px);padding:22px;border-radius:20px;background:#1a1230;border:1px solid var(--line);box-shadow:0 25px 80px #0009}.modal h2{margin:0 0 18px}.field{display:flex;flex-direction:column;gap:7px;margin:13px 0;color:var(--muted);font-size:13px}.field input,.field select{padding:11px;border:1px solid var(--line);border-radius:10px;background:#0d081b;color:white}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#261b42;border:1px solid var(--line);padding:10px 15px;border-radius:12px;display:none;z-index:9;font-size:13px}.toast.show{display:block}
-@media(max-width:760px){.app{grid-template-columns:1fr;padding:7px;gap:0}.sidebar{display:none}.main{border-radius:17px}.topbar{height:58px;padding:0 14px}.chat{padding:20px 13px}.composer-wrap{padding:10px}.suggestions{grid-template-columns:1fr}.welcome{padding:12px}.compose-hint{display:none}}
+*{box-sizing:border-box}
+body{margin:0;background:#0b0718;color:#fff;font-family:Arial,sans-serif;min-height:100vh;background-image:radial-gradient(circle at 20% 20%,#512080 0,transparent 35%),radial-gradient(circle at 85% 80%,#172d63 0,transparent 35%)}
+.app{display:flex;height:100vh;padding:14px;gap:14px}
+.sidebar,.main{background:#17112bd9;border:1px solid #ffffff20;backdrop-filter:blur(20px);border-radius:20px}
+.sidebar{width:260px;padding:16px;display:flex;flex-direction:column}
+.logo{font-size:23px;font-weight:bold;padding:12px 0 25px;color:#d8b4fe}
+button{cursor:pointer;color:white}
+.new{background:linear-gradient(120deg,#7c3aed,#c026d3);border:0;padding:13px;border-radius:12px;font-weight:bold}
+.history{flex:1;overflow:auto;margin-top:15px}
+.hist{padding:11px;border-radius:10px;color:#c4b5fd;cursor:pointer;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hist:hover{background:#ffffff15}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+header{padding:19px 22px;border-bottom:1px solid #ffffff20;font-weight:bold;display:flex;justify-content:space-between}
+.chat{flex:1;overflow:auto;padding:25px max(15px,calc((100% - 850px)/2))}
+.welcome{text-align:center;margin:auto;max-width:600px;padding-top:15vh}
+.welcome h1{font-size:38px;background:linear-gradient(90deg,#fff,#c084fc,#67e8f9);background-clip:text;color:transparent}
+.welcome p{color:#b9acd2;line-height:1.6}
+.suggestions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:25px}
+.suggestions button{background:#ffffff0d;border:1px solid #ffffff20;padding:15px;border-radius:12px;text-align:left}
+.message{display:flex;gap:12px;margin:0 auto 20px;max-width:850px}
+.avatar{width:35px;height:35px;flex-shrink:0;background:#7c3aed;border-radius:11px;display:grid;place-items:center}
+.bubble{background:#ffffff10;border:1px solid #ffffff15;padding:13px 16px;border-radius:4px 15px 15px 15px;line-height:1.7;overflow-wrap:anywhere}
+.user{flex-direction:row-reverse}
+.user .bubble{background:linear-gradient(120deg,#7040c5,#a855f7);border:0;border-radius:15px 4px 15px 15px}
+.bubble pre{background:#080612;padding:12px;border-radius:10px;overflow:auto}
+.composer-wrap{padding:14px;border-top:1px solid #ffffff20}
+.composer{max-width:900px;margin:auto;background:#100b20;border:1px solid #a78bfa66;border-radius:17px;padding:10px}
+textarea{width:100%;background:transparent;color:white;border:0;outline:0;resize:none;padding:10px;font:inherit;min-height:48px;max-height:150px}
+.actions{display:flex;justify-content:space-between;align-items:center}
+.actions button{background:#ffffff12;border:1px solid #ffffff20;border-radius:10px;padding:10px 13px}
+.actions .send{background:linear-gradient(120deg,#7c3aed,#c026d3);border:0}
+footer{text-align:center;color:#827594;font-size:11px;padding-top:8px}
+@media(max-width:700px){.app{padding:6px}.sidebar{display:none}.main{border-radius:15px}.chat{padding:15px}.welcome h1{font-size:29px}.suggestions{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
- <aside class="sidebar">
-  <div class="brand"><div class="logo">⚡</div><div><strong>ZEUSGPT</strong><small>AI ASSISTANT</small></div></div>
-  <button class="newchat" id="newChat">＋ Cuộc trò chuyện mới</button>
-  <div class="side-label">LỊCH SỬ GẦN ĐÂY</div>
-  <div class="history" id="history"></div>
-  <div class="side-bottom"><button class="softbtn" id="settingsBtn">⚙ Cài đặt</button><button class="softbtn" id="clearBtn">Xóa lịch sử</button></div>
- </aside>
- <main class="main">
-  <header class="topbar"><div class="top-title">ZEUSGPT <span style="color:#a78bfa">✦</span></div><div class="top-actions"><div class="status"><span class="dot"></span> Sẵn sàng</div><button class="softbtn" id="mobileNew" title="Cuộc trò chuyện mới">＋</button></div></header>
-  <section class="chat" id="chat">
-   <div class="welcome" id="welcome"><div class="welcome-logo">⚡</div><h1>Xin chào! Tôi là ZEUSGPT</h1><p>Trợ lý AI của bạn. Hãy đặt câu hỏi, học tập, sáng tạo hoặc cùng tôi giải quyết vấn đề.</p><div class="suggestions"><button class="suggestion">✦ Giải thích một kiến thức khó hiểu</button><button class="suggestion">✦ Viết một đoạn văn thật hay</button><button class="suggestion">✦ Lên ý tưởng cho website</button><button class="suggestion">✦ Giúp tôi học tiếng Anh</button></div></div>
-  </section>
-  <div class="composer-wrap"><div class="composer"><textarea id="prompt" rows="1" placeholder="Nhắn tin cho ZEUSGPT..."></textarea><div class="compose-row"><span class="compose-hint">Enter để gửi · Shift + Enter để xuống dòng</span><div class="compose-actions"><button class="iconbtn" id="micBtn" title="Nhập bằng giọng nói">🎙</button><button class="iconbtn" id="speakToggle" title="Bật/tắt đọc câu trả lời">🔊</button><button class="send" id="sendBtn" title="Gửi">➤</button></div></div></div><div class="notice">ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</div></div>
- </main>
+<aside class="sidebar">
+<div class="logo">⚡ ZEUSGPT</div>
+<button class="new" id="newChat">＋ Cuộc trò chuyện mới</button>
+<div class="history" id="history"></div>
+<button id="clear" style="background:#ffffff10;border:1px solid #ffffff20;padding:11px;border-radius:10px">Xóa lịch sử</button>
+</aside>
+<main class="main">
+<header>ZEUSGPT <span style="color:#86efac;font-size:12px">● Sẵn sàng</span></header>
+<section class="chat" id="chat">
+<div class="welcome" id="welcome">
+<div style="font-size:48px">⚡</div>
+<h1>Xin chào! Tôi là ZEUSGPT</h1>
+<p>Trợ lý AI của bạn. Hãy đặt câu hỏi, học tập, sáng tạo hoặc cùng tôi giải quyết vấn đề.</p>
+<div class="suggestions">
+<button>✦ Giải thích một kiến thức khó hiểu</button>
+<button>✦ Viết một đoạn văn thật hay</button>
+<button>✦ Lên ý tưởng cho website</button>
+<button>✦ Giúp tôi học tiếng Anh</button>
 </div>
-<div class="modal-back" id="settingsModal"><div class="modal"><h2>⚙ Cài đặt</h2><label class="field">Giao diện<select id="themeSelect"><option value="purple">Tím mặc định</option><option value="midnight">Đêm xanh</option><option value="light">Sáng</option></select></label><label class="field">Giọng đọc<select id="voiceSelect"><option value="vi-VN">Tiếng Việt</option><option value="en-US">English</option></select></label><label class="field"><span><input type="checkbox" id="autoSpeak" style="width:auto"> Tự động đọc câu trả lời</span></label><div class="modal-actions"><button class="softbtn" id="closeSettings">Đóng</button><button class="newchat" id="saveSettings">Lưu cài đặt</button></div></div></div>
-<div class="toast" id="toast"></div>
+</div>
+</section>
+<div class="composer-wrap">
+<div class="composer">
+<textarea id="prompt" placeholder="Nhắn tin cho ZEUSGPT..."></textarea>
+<div class="actions">
+<span style="font-size:11px;color:#9285aa">Enter để gửi · Shift + Enter xuống dòng</span>
+<div>
+<button id="mic">🎙</button>
+<button id="speak">🔊</button>
+<button class="send" id="send">➤</button>
+</div>
+</div>
+</div>
+<footer>ZEUSGPT có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.</footer>
+</div>
+</main>
+</div>
 <script>
-"use strict";
-const API_URL = "https://khanggpt.itzkenmcxd.workers.dev";
-const APP_NAME = "ZEUSGPT";
-const $ = id => document.getElementById(id);
-const STORAGE_KEY = "zeusgpt_local_chats_v1";
-const SETTINGS_KEY = "zeusgpt_settings_v1";
-let chats = loadChats(), currentId = null, busy = false, recognition = null;
-let settings = Object.assign({theme:"purple",voice:"vi-VN",autoSpeak:false,speak:true}, readJSON(SETTINGS_KEY,{ }));
-let messages = [];
-function readJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)) ?? fallback}catch{return fallback}}
-function loadChats(){const x=readJSON(STORAGE_KEY,[]);return Array.isArray(x)?x:[]}
-function saveChats(){localStorage.setItem(STORAGE_KEY,JSON.stringify(chats))}
-function makeId(){return "c"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function toast(s){const t=$("toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
+const API_URL="https://khanggpt.itzkenmcxd.workers.dev";
+const KEY="zeusgpt_chats";
+let chats=JSON.parse(localStorage.getItem(KEY)||"[]"),messages=[],current=null,busy=false,autoSpeak=false,voiceOn=true;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(chats));renderHistory()}
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function formatText(s){let x=escapeHTML(s);x=x.replace(/```([\s\S]*?)```/g,'<pre><code>$1</code></pre>');x=x.replace(/`([^`]+)`/g,'<code>$1</code>');x=x.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');x=x.replace(/\n/g,'<br>');return x}
-function renderHistory(){const h=$("history");h.innerHTML="";chats.slice().sort((a,b)=>b.updated-a.updated).forEach(c=>{const b=document.createElement("button");b.className="history-item"+(c.id===currentId?" active":"");b.textContent=c.title||"Cuộc trò chuyện mới";b.onclick=()=>openChat(c.id);h.appendChild(b)})}
-function showWelcome(){ $("chat").innerHTML=$("welcome").outerHTML; document.querySelectorAll(".suggestion").forEach(b=>b.onclick=()=>{$("prompt").value=b.textContent.replace(/^✦\s*/,"");sendMessage()})}
-function renderMessages(){const area=$("chat");area.innerHTML="";if(!messages.length){showWelcome();return}messages.forEach((m,i)=>{const wrap=document.createElement("div");wrap.className="message "+(m.role==="user"?"user":"assistant");const av=document.createElement("div");av.className="avatar";av.textContent=m.role==="user"?"Bạn":"⚡";const content=document.createElement("div");content.style.minWidth="0";const bubble=document.createElement("div");bubble.className="bubble";bubble.innerHTML=formatText(m.content||"");content.appendChild(bubble);if(m.role==="assistant"){const tools=document.createElement("div");tools.className="message-tools";const copy=document.createElement("button");copy.className="mini";copy.textContent="Sao chép";copy.onclick=()=>{navigator.clipboard?.writeText(m.content||"");toast("Đã sao chép")};const read=document.createElement("button");read.className="mini";read.textContent="Đọc";read.onclick=()=>speak(m.content||"");tools.append(copy,read);content.appendChild(tools)}wrap.append(av,content);area.appendChild(wrap)});area.scrollTop=area.scrollHeight}
-function persistCurrent(){if(!currentId||!messages.length)return;let c=chats.find(x=>x.id===currentId);if(!c){c={id:currentId,title:(messages.find(m=>m.role==="user")?.content||"Cuộc trò chuyện mới").slice(0,42),updated:Date.now(),messages:[]};chats.push(c)}c.messages=messages;c.updated=Date.now();saveChats();renderHistory()}
-function newChat(){currentId=null;messages=[];renderMessages();renderHistory();$("prompt").focus()}
-function openChat(id){const c=chats.find(x=>x.id===id);if(!c)return;currentId=id;messages=Array.isArray(c.messages)?c.messages:[];renderMessages();renderHistory()}
-function extractAnswer(data){if(typeof data==="string")return data;return data?.choices?.[0]?.message?.content??data?.result?.response??data?.response??data?.output_text??data?.message?.content??data?.content??data?.text??""}
-function addTyping(){const d=document.createElement("div");d.id="typing";d.className="message assistant";d.innerHTML='<div class="avatar">⚡</div><div class="bubble"><div class="typing"><i></i><i></i><i></i></div></div>'; $("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight}
-async function sendMessage(){if(busy)return;const input=$("prompt"),text=input.value.trim();if(!text)return;input.value="";input.style.height="48px";if(!currentId)currentId=makeId();messages.push({role:"user",content:text});renderMessages();busy=true;$("sendBtn").disabled=true;addTyping();
- try{const payload={app:APP_NAME,messages:[{role:"system",content:"Bạn là ZEUSGPT, một trợ lý AI hữu ích. Trả lời bằng tiếng Việt khi người dùng dùng tiếng Việt."},...messages.slice(-30)]};const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const raw=await res.text();let data;try{data=JSON.parse(raw)}catch{data=raw}if(!res.ok)throw new Error((data?.error?.message||data?.error||data?.message||raw||("HTTP "+res.status)).toString().slice(0,500));const answer=extractAnswer(data);if(!answer)throw new Error("Worker không trả về nội dung văn bản. Hãy kiểm tra định dạng phản hồi của Worker.");messages.push({role:"assistant",content:String(answer)});persistCurrent();renderMessages();if(settings.autoSpeak&&settings.speak)speak(String(answer))}
- catch(e){messages.pop();renderMessages();toast("Lỗi kết nối: "+e.message);console.error(e)}
- finally{busy=false;$("sendBtn").disabled=false;$("prompt").focus()}}
-function speak(text){if(!("speechSynthesis"in window)){toast("Trình duyệt không hỗ trợ đọc văn bản");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=settings.voice||"vi-VN";u.rate=1;speechSynthesis.speak(u)}
-function startMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast("Hãy dùng Chrome để nhập giọng nói");return}if(recognition){recognition.stop();recognition=null;$("micBtn").classList.remove("active");return}recognition=new SR();recognition.lang="vi-VN";recognition.interimResults=false;recognition.onresult=e=>{$("prompt").value+=e.results[0][0].transcript};recognition.onerror=()=>toast("Không nhận được giọng nói. Hãy kiểm tra quyền micro.");recognition.onend=()=>{$("micBtn").classList.remove("active");recognition=null};recognition.start();$("micBtn").classList.add("active")}
-function applyTheme(t){document.body.dataset.theme=t;if(t==="light"){document.documentElement.style.setProperty("--bg","#eee9fa");document.documentElement.style.setProperty("--panel","rgba(255,255,255,.82)");document.documentElement.style.setProperty("--panel2","rgba(225,215,248,.8)");document.documentElement.style.setProperty("--text","#211735");document.documentElement.style.setProperty("--muted","#685b7d")}else if(t==="midnight"){document.documentElement.style.setProperty("--bg","#050d20");document.documentElement.style.setProperty("--panel","rgba(10,24,48,.82)");document.documentElement.style.setProperty("--panel2","rgba(20,42,75,.8)");document.documentElement.style.setProperty("--text","#eff6ff");document.documentElement.style.setProperty("--muted","#a8bad5")}else{document.documentElement.style.setProperty("--bg","#0b0718");document.documentElement.style.setProperty("--panel","rgba(25,18,48,.78)");document.documentElement.style.setProperty("--panel2","rgba(38,27,70,.72)");document.documentElement.style.setProperty("--text","#f6f1ff");document.documentElement.style.setProperty("--muted","#b9acd2")}}
-$("sendBtn").onclick=sendMessage;$("newChat").onclick=newChat;$("mobileNew").onclick=newChat;$("micBtn").onclick=startMic;$("speakToggle").onclick=()=>{settings.speak=!settings.speak;$("speakToggle").classList.toggle("active",settings.speak);toast(settings.speak?"Đã bật đọc câu trả lời":"Đã tắt đọc câu trả lời");saveSettings()};$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}});$("prompt").addEventListener("input",e=>{e.target.style.height="48px";e.target.style.height=Math.min(e.target.scrollHeight,160)+"px"});
-$("settingsBtn").onclick=()=>{$("themeSelect").value=settings.theme;$("voiceSelect").value=settings.voice;$("autoSpeak").checked=settings.autoSpeak;$("settingsModal").classList.add("show")};$("closeSettings").onclick=()=>$("settingsModal").classList.remove("show");$("saveSettings").onclick=()=>{settings.theme=$("themeSelect").value;settings.voice=$("voiceSelect").value;settings.autoSpeak=$("autoSpeak").checked;saveSettings();applyTheme(settings.theme);$("settingsModal").classList.remove("show");toast("Đã lưu cài đặt")};
-function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));$("speakToggle").classList.toggle("active",settings.speak)}
-$("clearBtn").onclick=()=>{if(confirm("Xóa toàn bộ lịch sử chat đã lưu trên trình duyệt này?")){chats=[];saveChats();newChat();toast("Đã xóa lịch sử")}};
-$("settingsModal").addEventListener("click",e=>{if(e.target===$("settingsModal"))$("settingsModal").classList.remove("show")});
-applyTheme(settings.theme);$("speakToggle").classList.toggle("active",settings.speak);renderHistory();renderMessages();
+function format(s){return escapeHTML(s).replace(/```([\s\S]*?)```/g,"<pre><code>$1</code></pre>").replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*(.*?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>")}
+function renderHistory(){const h=$("history");h.innerHTML="";chats.slice().sort((a,b)=>b.time-a.time).forEach(c=>{let d=document.createElement("div");d.className="hist";d.textContent=c.title;d.onclick=()=>openChat(c.id);h.appendChild(d)})}
+function render(){let area=$("chat");area.innerHTML="";if(!messages.length){area.innerHTML=$("welcome").outerHTML;area.querySelectorAll(".suggestions button").forEach(b=>b.onclick=()=>{$("prompt").value=b.textContent.replace(/^✦\s*/,"");send()});return}messages.forEach(m=>{let d=document.createElement("div");d.className="message "+(m.role==="user"?"user":"");d.innerHTML='<div class="avatar">'+(m.role==="user"?"Bạn":"⚡")+'</div><div class="bubble">'+format(m.content)+'</div>';area.appendChild(d)});area.scrollTop=area.scrollHeight}
+function persist(){let c=chats.find(x=>x.id===current);if(!c){c={id:current,title:messages.find(x=>x.role==="user")?.content.slice(0,35)||"Cuộc trò chuyện mới",time:Date.now(),messages:[]};chats.push(c)}c.messages=messages;c.time=Date.now();save()}
+function openChat(id){let c=chats.find(x=>x.id===id);if(!c)return;current=id;messages=c.messages||[];render()}
+function newChat(){current=null;messages=[];render()}
+async function send(){if(busy)return;let text=$("prompt").value.trim();if(!text)return;$("prompt").value="";if(!current)current=Date.now().toString(36);messages.push({role:"user",content:text});render();busy=true;$("send").disabled=true;let wait=document.createElement("div");wait.className="message";wait.id="waiting";wait.innerHTML='<div class="avatar">⚡</div><div class="bubble">Đang suy nghĩ...</div>';$("chat").appendChild(wait);
+try{
+let res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app:"ZEUSGPT",messages:[{role:"system",content:"Bạn là ZEUSGPT, trợ lý AI hữu ích. Trả lời bằng tiếng Việt khi phù hợp."},...messages.slice(-30)]})});
+let raw=await res.text(),data;try{data=JSON.parse(raw)}catch{data=raw}
+if(!res.ok)throw Error(data?.error?.message||data?.error||data?.message||raw||"HTTP "+res.status);
+let answer=typeof data==="string"?data:(data?.choices?.[0]?.message?.content??data?.result?.response??data?.response??data?.output_text??data?.message?.content??data?.content??data?.text??"");
+if(!answer)throw Error("Worker không trả về nội dung văn bản");
+messages.push({role:"assistant",content:String(answer)});persist();render();if(autoSpeak&&voiceOn)speak(answer)
+}catch(e){messages.pop();render();alert("Lỗi: "+e.message)}
+finally{busy=false;$("send").disabled=false}
+}
+function speak(t){if(!("speechSynthesis"in window))return;speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="vi-VN";speechSynthesis.speak(u)}
+$("send").onclick=send;$("newChat").onclick=newChat;$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+$("prompt").addEventListener("input",e=>{e.target.style.height="48px";e.target.style.height=Math.min(e.target.scrollHeight,150)+"px"});
+$("clear").onclick=()=>{if(confirm("Xóa toàn bộ lịch sử chat?")){chats=[];save();newChat()}};
+$("mic").onclick=()=>{let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){alert("Hãy dùng Chrome để sử dụng micro");return}let r=new SR();r.lang="vi-VN";r.onresult=e=>$("prompt").value+=e.results[0][0].transcript;r.onerror=()=>alert("Không truy cập được micro");r.start()};
+$("speak").onclick=()=>{voiceOn=!voiceOn;$("speak").style.background=voiceOn?"#ffffff12":"#7c3aed";if(!voiceOn)speechSynthesis.cancel()};
+renderHistory();render();
 </script>
 </body>
-</html>'''
-path = Path("/mnt/data/ZEUSGPT-no-login.html")
-path.write_text(html, encoding="utf-8")
-print(f"Đã tạo {path} ({len(html):,} ký tự)")
+</html>
